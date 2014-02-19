@@ -100,7 +100,7 @@ js
 
 	var target;
     
-    function showTypePicker_multi(e) {
+    function showTypePicker(e) {
     	var column_1 = [
         		{ title: '1', value: 1 },
                 { title: '2', value: 2 },
@@ -116,13 +116,13 @@ js
         target = txt;
         
         $.valuePicker.show({
-        	callback: updateType_multi,
+        	callback: updateType,
             data: [ column_1, column_2 ],
             values: txt.typeValue
         });
 	}
 
-	function updateType_multi(values) {
+	function updateType(values) {
     	target.typeValue = values;
         target.value = values[0].title + ' - ' + values[1].title;
         
