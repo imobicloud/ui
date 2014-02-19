@@ -1,9 +1,6 @@
 # ui
 ====
-
 titanium ui elements
-
-
 
 ## Date picker
 
@@ -68,6 +65,7 @@ xml
 js
 	
     var target;
+    
     // === one column picker
     
     function showTypePicker(e) {
