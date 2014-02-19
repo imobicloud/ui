@@ -64,11 +64,11 @@ xml
     
     <Require id="valuePicker" src="elements/value_picker"/>
 
+### One Column Picker
+
 js
 	
     var target;
-    
-    // === one column picker
     
     function showTypePicker(e) {
     	var data = [
@@ -93,10 +93,14 @@ js
         
         $.valuePicker.hide();
 	}
-    
-	// === multi column picker
 
-	function showTypePicker_multi(e) {
+### Multi Column Picker
+
+js
+
+	var target;
+    
+    function showTypePicker_multi(e) {
     	var column_1 = [
         		{ title: '1', value: 1 },
                 { title: '2', value: 2 },
@@ -124,4 +128,3 @@ js
         
         $.valuePicker.hide();
 	}
-    
