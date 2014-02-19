@@ -4,7 +4,8 @@
 ## Date picker
 
 xml
-	<View class="textfield" onClick="showDatePicker">
+	
+    <View class="textfield" onClick="showDatePicker">
 		<TextField class="txt" editable="false"/>
 		<ImageView class="icon-calendar" touchEnabled="false"/>
 	</View>
@@ -29,7 +30,8 @@ js
 ## Time Picker
 
 xml
-	<View class="textfield" onClick="showTimePicker">
+	
+    <View class="textfield" onClick="showTimePicker">
 		<TextField class="txt" editable="false"/>
 		<ImageView class="icon-clock" touchEnabled="false"/>
 	</View>
@@ -54,7 +56,8 @@ js
 ## Value picker
 
 xml
-    <View class="textfield" onClick="showTypePicker">
+   
+     <View class="textfield" onClick="showTypePicker">
 		<TextField class="txt"  editable="false" value="What type of event is this?"/>
 		<ImageView class="icon-type" touchEnabled="false"/>
 	</View>
