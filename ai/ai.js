@@ -16,16 +16,17 @@ exports.toggle = function(visible, message, timeout) {
 		
 		if (timeout) {
 			aiTimeout = setTimeout(function(){
-				Ti.UI.createAlertDialog({
+				var dialog = Ti.UI.createAlertDialog({
 					buttonNames : ['OK'],
 					message : 'Activity timeout',
 					title : 'Error'
-				}).show(); 
+				});
+				dialog.show();
+				dialog.addEventListener('click', hideAI);
 			}, timeout);
 		}
 	} else {
-		$.loadingSpinner.hide();
-		$.ai.visible = false;
+		hideAI();
 	}
 };
 
@@ -40,4 +41,9 @@ function showAI(message) {
   	message && ($.loadingMessage.text = message);
 	$.loadingSpinner.show();
 	$.ai.visible = true;
+}
+
+function hideAI() {
+  	$.loadingSpinner.hide();
+	$.ai.visible = false;
 }
