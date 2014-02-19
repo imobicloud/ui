@@ -16,7 +16,8 @@ xml
     <Require id="datePicker" src="elements/date_picker"/>
 
 js
-	var target;
+	
+    var target;
     function showDatePicker(e) {
 		var txt = e.source.children[0];
         target = txt;
@@ -40,7 +41,8 @@ xml
     <Require id="timePicker" src="elements/time_picker"/>
 
 js
-	var target;
+	
+    var target;
     function showTimePicker(e) {
     	var txt = e.source.children[0];
         target = txt;
@@ -64,7 +66,8 @@ xml
     <Require id="valuePicker" src="elements/value_picker"/>
 
 js
-	var target;
+	
+    var target;
     // === one column picker
     
     function showTypePicker(e) {
