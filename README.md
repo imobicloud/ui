@@ -1,6 +1,5 @@
-# ui
+# titanium ui elements
 ====
-titanium ui elements
 
 ## Date picker
 
