@@ -17,7 +17,6 @@ xml
 
 js
 	var target;
-    
     function showDatePicker(e) {
 		var txt = e.source.children[0];
         target = txt;
@@ -42,7 +41,6 @@ xml
 
 js
 	var target;
-    
     function showTimePicker(e) {
     	var txt = e.source.children[0];
         target = txt;
@@ -67,7 +65,6 @@ xml
 
 js
 	var target;
-    
     // === one column picker
     
     function showTypePicker(e) {
