@@ -1,0 +1,18 @@
+<Alloy>
+	<View id="container" class="container">
+		<Toolbar class="toolbar" platform="ios">
+			<Items>
+				<Button systemButton="Ti.UI.iPhone.SystemButton.CANCEL" onClick="hidePicker"/>
+				<FlexSpace/>
+				<Button title="Set" style="Ti.UI.iPhone.SystemButtonStyle.DONE" onClick="setValue"/>
+			</Items>
+		</Toolbar>
+		
+		<View class="toolbar-android" platform="android">
+			<Button class="button btn-cancel" title="Cancel" onClick="hidePicker"/>
+			<Button class="button btn-set" title="Set" onClick="setValue"/>
+		</View>
+		
+		<View id="placeholder"/>
+	</View>
+</Alloy>

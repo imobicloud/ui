@@ -1,0 +1,8 @@
+<Alloy>
+	<View id="ai">
+	    <View class="wrapper">
+	    	<ActivityIndicator id="loadingSpinner"/>
+	    	<Label id="loadingMessage">Loading...</Label>
+	    </View>
+	</View>
+</Alloy>

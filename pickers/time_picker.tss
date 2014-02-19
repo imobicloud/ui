@@ -1,0 +1,3 @@
+".container": { height: Ti.UI.SIZE, bottom: 0, layout: 'vertical', visible: false }
+	".toolbar": { borderBottom: false, borderTop: false }
+	".time-picker": { selectionIndicator: true, type: Ti.UI.PICKER_TYPE_TIME }

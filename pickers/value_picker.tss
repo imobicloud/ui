@@ -1,0 +1,9 @@
+".container": { height: Ti.UI.SIZE, bottom: 0, layout: 'vertical', visible: false }
+	".toolbar": { borderBottom: false, borderTop: false }
+	
+	".toolbar-android": { height: Alloy.CFG.size_42, backgroundColor: '#dcdcdc' }
+		".button": { width: Alloy.CFG.size_100, height: Alloy.CFG.size_32, font: { fontSize: Alloy.CFG.size_13, fontFamily: 'AGaramondPro-Regular' } }
+		".btn-cancel": { left: Alloy.CFG.size_5, backgroundColor: '#999', color: '#000' }
+		".btn-set": { right: Alloy.CFG.size_5, backgroundColor: '#007aff', color: '#fff' }
+	
+	"#placeholder": { height: Ti.UI.SIZE }

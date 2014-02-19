@@ -1,0 +1,13 @@
+<Alloy>
+	<View id="container" class="container" platform="ios">
+		<Toolbar class="toolbar">
+			<Items>
+				<Button systemButton="Ti.UI.iPhone.SystemButton.CANCEL" onClick="hidePicker"/>
+				<FlexSpace/>
+				<Button title="Set" style="Ti.UI.iPhone.SystemButtonStyle.DONE" onClick="setTime"/>
+			</Items>
+		</Toolbar>
+		
+		<Picker id="timePicker" class="time-picker"/>
+	</View>
+</Alloy>
