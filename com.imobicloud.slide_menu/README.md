@@ -5,7 +5,7 @@ Slide menu with 2 anchors
 
 xml
 
-	<Widget id="categories" src="com.imobicloud.slide_menu"/>
+	<Widget id="menu" src="com.imobicloud.slide_menu"/>
 	<View id="content/>
 
 tss
@@ -40,3 +40,10 @@ js
 	function menuClicked(e){
 		// e.itemId
 	}
+
+You can update menu properties directly via $.menu.menu (this is a ListView)
+Example: 
+	
+	$.menu.menu.getView().top = 100;
+	$.menu.menu.addEventListener('delete', function(){});
+	$.menu.menu.headerView = $.UI.create('View', { classes: 'menu-header' });
