@@ -1,0 +1,6 @@
+/*
+".tabbed-bar": {  }
+".tabbed-bar[platform=android]": { width: Ti.UI.SIZE, height: 30, borderWidth: 1, borderColor: '#007aff', borderRadius: 3, layout: 'horizontal' }
+	".tabbed-bar-button": { color: '#007aff', font: { fontSize: 14 }, backgroundColor: 'transparent' }
+	".tabbed-bar-button-active": { backgroundColor: '#007aff', color: '#fff' }
+*/

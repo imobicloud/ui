@@ -1,14 +1,14 @@
 var callback,
 	picker,
-	selectedValues = [];
+	selectedIndexs = [];
 
 /*
  params = {
- 	callback: function(values){ alert( values[0].title ); },
+ 	callback: function(values, indexs){ alert( values[0].title ); },
  	data: [
  		[{ title: 'After' }, { title: 'Before' }]
  	],
- 	values: [1] 			// column 0 - row 1
+ 	indexs: [1] 			// column 0 - row 1
  }
  * */
 exports.show = function(params) {
@@ -17,14 +17,14 @@ exports.show = function(params) {
 	//
 	
 	picker = null;
-	selectedValues.length = 0;
+	selectedIndexs.length = 0;
 	$.placeholder.removeAllChildren();
 	
 	//
 	
 	var columns = [],
 		data = params.data,
-		values = params.values || [];
+		indexs = params.indexs || [];
 		
 	for(var i=0,ii=data.length; i<ii; i++){
 		var rows = data[i],
@@ -36,7 +36,7 @@ exports.show = function(params) {
 		
 		columns.push(column);
 		
-		selectedValues.push(values[i] || 0);
+		selectedIndexs.push(indexs[i] || 0);
 	};
 	
 	picker = Ti.UI.createPicker({ selectionIndicator: true });
@@ -47,8 +47,8 @@ exports.show = function(params) {
 	
 	//
 	
-	for(var i=0,ii=selectedValues.length; i<ii; i++){
-	  	picker.setSelectedRow(i, selectedValues[i], false);
+	for(var i=0,ii=selectedIndexs.length; i<ii; i++){
+	  	picker.setSelectedRow(i, selectedIndexs[i], false);
 	};
 	
 	//
@@ -64,13 +64,13 @@ exports.hide = hidePicker;
 function setValue(e) {
 	var values = [];
 	
-	for(var i=0,ii=selectedValues.length; i<ii; i++){
-	  	values.push( picker.columns[ i ].rows[ selectedValues[i] ] );
+	for(var i=0,ii=selectedIndexs.length; i<ii; i++){
+	  	values.push( picker.columns[ i ].rows[ selectedIndexs[i] ] );
 	};
 	
-	callback(values);
+	callback(values, selectedIndexs);
 }
 
 function valueChanged(e) {
-	selectedValues[ e.columnIndex ] = e.rowIndex;
+	selectedIndexs[ e.columnIndex ] = e.rowIndex;
 }

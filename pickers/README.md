@@ -84,12 +84,12 @@ js
         $.valuePicker.show({
         	callback: updateType,
             data: [ data ],
-            values: txt.typeValue
+            indexs: txt.typeIndexs
         });
 	}
 
-	function updateType(values) {
-    	target.typeValue = values;
+	function updateType(values, indexs) {
+    	target.typeIndexs = indexs;
         target.value = values[0].title;
         
         $.valuePicker.hide();
@@ -119,12 +119,12 @@ js
         $.valuePicker.show({
         	callback: updateType,
             data: [ column_1, column_2 ],
-            values: txt.typeValue
+            indexs: txt.typeIndexs
         });
 	}
 
-	function updateType(values) {
-    	target.typeValue = values;
+	function updateType(values, indexs) {
+    	target.typeIndexs = indexs;
         target.value = values[0].title + ' - ' + values[1].title;
         
         $.valuePicker.hide();
