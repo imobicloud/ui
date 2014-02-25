@@ -22,15 +22,7 @@ params = {
 exports.init = function(sections, params) {
 	vars = params;
 	
-	//
-	
-	var arrSections = [];
-		
-	for(var i=0,ii=sections.length; i<ii; i++){
-	  	arrSections.push( Ti.UI.createListSection(sections[i]) );
-	};
-	
-	$.menu.sections = arrSections;
+	loadMenu(sections);
 	
 	//
 	
@@ -44,6 +36,21 @@ exports.init = function(sections, params) {
 	slider.left = anchor[slideIndex];
 	
 	slider.addEventListener('swipe', sliderSwiped);
+};
+
+function loadMenu(sections) {
+  	var arrSections = [];
+		
+	for(var i=0,ii=sections.length; i<ii; i++){
+	  	arrSections.push( Ti.UI.createListSection(sections[i]) );
+	};
+	
+	$.menu.sections = arrSections;
+}
+
+exports.load = function(sections) {
+	loadMenu(sections);
+	$.menu.scrollToItem(0, 0);
 };
 
 function menuClicked(e) {
