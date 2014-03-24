@@ -34,12 +34,17 @@ js
 	$.menu.init(sections, {
  		slider: $.content,
  		anchor: [60, 200],
+ 		defaultAnchor: 0,
  		onClick: menuClicked
 	});
 
 	function menuClicked(e){
 		// e.itemId
 	}
+
+	// toggle menu
+	$.menu.toggle();
+	$.menu.toggle(1);
 
 You can update menu properties directly via $.menu.menu (this is a ListView)
 Example: 

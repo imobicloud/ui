@@ -14,6 +14,7 @@ sections = [{
 params = {
 	slider: Ti.UI.View,
 	anchor: [ 40, 200 ],
+	defaultAnchor: 0,
 	onClick: function(e) {
 		// http://docs.appcelerator.com/titanium/latest/#!/api/Titanium.UI.ListView-event-itemclick
 	}
@@ -31,7 +32,7 @@ exports.init = function(sections, params) {
 	
 	slider.width = Ti.Platform.displayCaps.platformWidth - anchor[0];
 	
-	var slideIndex = anchor.length - 1;
+	var slideIndex = params.defaultAnchor || 0;
 	vars.slideIndex = slideIndex;
 	slider.left = anchor[slideIndex];
 	
@@ -70,6 +71,10 @@ function sliderSwiped(e) {
 }
 
 exports.toggle = function(index) {
+	if (typeof index != 'number') {
+		index = null;
+	}
+	
 	if (index === vars.slideIndex) {
 		return;
 	}
@@ -87,6 +92,7 @@ exports.toggle = function(index) {
 
 function slide(index, animated) {
 	vars.slideIndex = index;
+	
 	if (animated !== false) {
 		vars.slider.animate({
 			left: vars.anchor[index],
