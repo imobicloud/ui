@@ -23,8 +23,6 @@ params = {
 exports.init = function(sections, params) {
 	vars = params;
 	
-	loadMenu(sections);
-	
 	//
 	
 	var slider = params.slider,
@@ -37,6 +35,10 @@ exports.init = function(sections, params) {
 	slider.left = anchor[slideIndex];
 	
 	slider.addEventListener('swipe', sliderSwiped);
+	
+	//
+	
+	loadMenu(sections);
 };
 
 function loadMenu(sections) {
