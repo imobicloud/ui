@@ -15,6 +15,7 @@ params = {
 	slider: Ti.UI.View,
 	anchor: [ 40, 200 ],
 	defaultAnchor: 0,
+	swipeToToggle: true,
 	onClick: function(e) {
 		// http://docs.appcelerator.com/titanium/latest/#!/api/Titanium.UI.ListView-event-itemclick
 	}
@@ -34,7 +35,9 @@ exports.init = function(sections, params) {
 	vars.slideIndex = slideIndex;
 	slider.left = anchor[slideIndex];
 	
-	slider.addEventListener('swipe', sliderSwiped);
+	if (params.swipeToToggle !== false) {
+		slider.addEventListener('swipe', sliderSwiped);
+	}
 	
 	//
 	
