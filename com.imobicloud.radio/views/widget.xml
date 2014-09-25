@@ -1,0 +1,3 @@
+<Alloy>
+	<View class="radio-container" onClick="toggleRadio"></View>
+</Alloy>

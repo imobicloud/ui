@@ -1,0 +1,116 @@
+var args,
+	vars = {};
+
+exports.init = function(params) {
+	args = _.extend({
+		width: Ti.Platform.displayCaps.platformWidth,
+		gutter: 5,
+		onClick: function(e) {}
+	}, params);
+	
+	var gutter = args.gutter,
+		space  = args.width - gutter * 4,
+		small  = Math.floor(space / 3);
+  	vars.small  = small;
+  	vars.medium = small * 2 + gutter;
+  	vars.large  = small * 3 + gutter * 2;
+};
+
+exports.load = function(photos) {
+	if (photos.length == 0) {
+		$.gallery.add( Ti.UI.createLabel({ text: 'No Photo', font: { fontSize: 12 }, color: '#000' }) );
+		return;
+	}
+	
+	var positions = [],
+		index = 0;
+		
+	// render
+		
+	var gutter  = args.gutter,
+		cell    = vars.small + gutter,
+		wrapper = Ti.UI.createView({ height: Ti.UI.SIZE, top: 0, bottom: gutter });
+	
+	for(var i = 0, ii = photos.length; i < ii; i++){
+	  	var photo = photos[i],
+	  		size = photo.size,
+	  		rect = vars[size];
+	  	
+	  	var _index = index,
+	  		column = index % 3;
+	  	
+	  	if (size == 'small') {
+	  		if (positions.length) {
+		  		_index = positions.splice(0, 1);
+		  		column = _index % 3;
+		  	} else {
+		  		index ++;
+		  	}
+	  	} else {
+	  		if (size == 'large') {
+	  			if (column > 0) {
+		  			for (var j = column; j < 3; j++){
+						positions.push(index);
+						index ++;
+					};
+		  		}
+		  		
+		  		_index = index + 1;
+		  		column = 0;
+		  		
+		  		index += 9;
+		  	} else {
+		  		if (column == 2) {
+		  			positions.push(index);
+		  			index ++;
+		  			
+		  			_index = index;
+		  			column = 0;
+		  		}
+		  		
+		  		positions.push(index + 2);
+		  		
+		  		if (column == 1) {
+		  			index += 5;
+		  		} else {
+		  			positions.push(index + 5);
+		  			index += 6;
+		  		}
+		  	}
+	  	}
+	  	
+	  	var left = column * cell + gutter,
+		  	top  = Math.floor( _index / 3 ) * cell + gutter;
+	  	
+	  	wrapper.add(Ti.UI.createImageView({
+	  		data: photo.data,
+	  		image: photo.url,
+	  		width: rect,
+	  		height: rect,
+	  		top: top,
+	  		left: left
+	  	}));
+	};
+	
+	$.gallery.add(wrapper);
+};
+
+exports.clear = function() {
+	vars.selected = null;
+	$.gallery.removeAllChildren();
+};
+
+function galleryClick(e) {
+	var photo = e.source;
+	
+	if (photo.data == null) {
+		return;
+	}
+	
+	var last = vars.selected;
+	last && last.applyProperties({ borderWidth: 0, borderColor: 'transparent' });
+	photo.applyProperties({ borderWidth: 2, borderColor: '#098ED1' });
+	vars.selected = photo;
+	
+  	args.onClick(photo.data);
+}

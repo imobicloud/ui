@@ -1,0 +1,15 @@
+/*
+".radio-container": {  }
+	".radio-item":  {  }
+		".radio-icon":  { touchEnabled: false }
+		".radio-label": { touchEnabled: false }
+		
+		".radio-icon-male": 	  { image: '' }
+		".radio-icon-male-on": 	  { image: '' }
+		".radio-icon-female":     { image: '' }
+		".radio-icon-female-on":  { image: '' }
+		".radio-label-male":      { text: '', color: '' }
+		".radio-label-male-on":   { text: '', color: '' }
+		".radio-label-female": 	  { text: '', color: '' }
+		".radio-label-female-on": { text: '', color: '' }
+*/

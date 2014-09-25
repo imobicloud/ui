@@ -1,0 +1,11 @@
+<Alloy>
+	<View class="toast-container" onClick="messageClick">
+		<View class="toast-wrapper">
+			<ImageView id="icon" class="toast-icon"/>
+			<View class="toast-inner">
+				<Label id="title" class="toast-title"/>
+				<Label id="message" class="toast-message"/>
+			</View>
+		</View>
+	</View>
+</Alloy>

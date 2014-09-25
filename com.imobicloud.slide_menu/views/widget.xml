@@ -1,12 +1,1 @@
-<Alloy>
-	<View class="slide-menu-container">
-		<ListView id="menu" class="slide-menu" defaultItemTemplate="template" onItemclick="menuClicked">
-			<Templates>
-	            <ItemTemplate name="template" class="slide-menu-item">
-	                <ImageView bindId="image" class="slide-menu-image"/>
-	                <Label bindId="title" class="slide-menu-title"/>
-	            </ItemTemplate>
-	        </Templates>
-		</ListView>
-	</View>
-</Alloy>
+<Alloy/>

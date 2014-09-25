@@ -5,50 +5,32 @@ Slide menu with 2 anchors
 
 xml
 
-	<Widget id="menu" src="com.imobicloud.slide_menu" anchors="[0, 230]">
-			<ListView id="lvMenu" class="menu"></ListView>
-			<View id="content" role="slider"/>
-		</Widget>
+	<Widget id="radioWeAre" src="com.imobicloud.radio" values="['male', 'female']" value=“male” icon="true" title=“true”/>
 
 tss
 
-	".menu": { width: 230, top: 40, bottom: 30, left: 0 }
-  "#content": { width: '100%', left: 0, backgroundColor: '#fff' }
+	".radio-container": { height: 43, left: 20, layout: 'horizontal' }
+	".radio-item":  { width: 44, height: 43, right: 10 }
+		".radio-icon":  { touchEnabled: false }
+		".radio-label": { touchEnabled: false }
+		
+		".radio-icon-male": 	  { image: '/images/preferences/male.png' }
+		".radio-icon-male-on": 	  { image: '/images/preferences/male-on.png' }
+		".radio-icon-female":     { image: '/images/preferences/female.png' }
+		".radio-icon-female-on":  { image: '/images/preferences/female-on.png' }
+		
+		".radio-label-male":      { text: '', color: ‘#999’ }
+		".radio-label-male-on":   { text: '', color: ‘#39c2e1’ }
+		".radio-label-female": 	  { text: '', color: '#999' }
+		".radio-label-female-on": { text: '', color: ‘#39c2e1’ }
 
-js
+js 
 
-	var items = [];
-	for (var i=0; i < 10; i++) {
-	  	items.push({
-	  		properties: { itemId: 'item_' + i },
-	  		title: { text: 'Item title ' + i },
-	  		image: { image: '/images/avatar.jpg' }
-	  	});
-	};
-
-	var sections = [{
-		// headerView: Ti.UI.View,
-		items: items
-	}];
-
-	$.menu.init(sections, {
- 		slider: $.content,
- 		anchor: [60, 200],
- 		defaultAnchor: 0,
- 		onClick: menuClicked
-	});
-
-	function menuClicked(e){
-		// e.itemId
-	}
-
-	// toggle menu
-	$.menu.toggle();
-	$.menu.toggle(1);
+	$.radioWeAre.getValue(); => ‘male’
 
 You can update menu properties directly via $.menu.menu (this is a ListView)
-Example:
-
+Example: 
+	
 	$.menu.menu.getView().top = 100;
 	$.menu.menu.addEventListener('delete', function(){});
 	$.menu.menu.headerView = $.UI.create('View', { classes: 'menu-header' });
@@ -84,10 +66,10 @@ Example:
 
 	var items = [];
 	for (var i=0; i < 10; i++) {
-	  	items.push({
-	  		// template: 'categoryTemplate',
-	  		properties: { itemId: 'item_' + i },
-	  		title: { text: 'Item title ' + i },
-	  		image: { image: '/images/avatar.jpg' }
+	  	items.push({ 
+	  		// template: 'categoryTemplate', 
+	  		properties: { itemId: 'item_' + i }, 
+	  		title: { text: 'Item title ' + i }, 
+	  		image: { image: '/images/avatar.jpg' } 
 	  	});
 	};

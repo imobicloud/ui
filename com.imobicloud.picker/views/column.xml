@@ -1,0 +1,16 @@
+<Alloy>
+	<ListView id="column" class="picker-list" defaultItemTemplate="title" onItemclick="columnClick">
+		<Templates>
+            <ItemTemplate name="title" class="picker-item">
+                <Label bindId="title" class="picker-item-title"/>
+            </ItemTemplate>
+            <ItemTemplate name="icon-title" class="picker-item">
+                <ImageView bindId="icon" class="picker-item-icon"/>
+                <Label bindId="title" class="picker-item-title"/>
+            </ItemTemplate>
+            <ItemTemplate name="icon" class="picker-item">
+                <ImageView bindId="icon" class="picker-item-icon"/>
+            </ItemTemplate>
+        </Templates>
+	</ListView>
+</Alloy>

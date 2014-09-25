@@ -1,0 +1,3 @@
+".dialog-container" : { visible: false, opacity: 0 }
+	".dialog-overlay": { backgroundColor: '#80000000' }
+	".dialog-wrapper": { height: Ti.UI.SIZE, backgroundColor: '#fff', layout: 'vertical' }

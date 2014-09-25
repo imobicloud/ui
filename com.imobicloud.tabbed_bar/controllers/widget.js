@@ -5,6 +5,7 @@ var onClick;
  	index: 0,
  	labels: [ 'one', 'two', 'three' ],
  	styles: {},
+ 	tssClass: null,
  	onClick: function(index, label){}
  }
  * */
@@ -13,19 +14,19 @@ exports.init = function(params) {
 		$.tabbedBar.applyProperties(params.styles);
 	}
 	
-	if (OS_ANDROID) {
-		var labels = params.labels,
-			index = params.index;
-			
-		for(var i=0,ii=labels.length; i<ii; i++){
-			var classes = 'tabbed-bar-button';
-			(i === index) && (classes += ' tabbed-bar-button-active');
-		  	$.tabbedBar.add( $.UI.create('Button', { buttonIndex: i, title: '  ' + labels[i] + '  ', classes: classes }) );
-		};
-	}
+	var labels = params.labels,
+		index = params.index,
+		tssClass = params.tssClass;
+		
+	for(var i=0,ii=labels.length; i<ii; i++){
+		var classes = 'tabbed-bar-button ';
+		(i === index) && (classes += 'tabbed-bar-button-active ');
+		tssClass && (classes += tssClass + '-' + ( i+1 ));
+	  	$.tabbedBar.add( $.UI.create('Button', { buttonIndex: i, title: labels[i], classes: classes }) );
+	};
 	
-	$.tabbedBar.labels = params.labels;
-	$.tabbedBar.index = params.index;
+	$.tabbedBar.labels = labels;
+	$.tabbedBar.index = index;
 	
 	onClick = params.onClick || function() {};
 };

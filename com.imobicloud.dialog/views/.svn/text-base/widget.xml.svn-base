@@ -1,0 +1,8 @@
+<Alloy>
+	<View class="dialog-container">
+		<View class="dialog-overlay" onClick="hideDialog"/>
+		<View id="container" class="dialog-wrapper">
+						
+		</View>
+	</View>
+</Alloy>

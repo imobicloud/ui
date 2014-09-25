@@ -1,0 +1,6 @@
+<Alloy>
+	<View class="dialog-container">
+		<View id="overlay" class="dialog-overlay"/>
+		<View id="container" class="dialog-wrapper"></View>
+	</View>
+</Alloy>

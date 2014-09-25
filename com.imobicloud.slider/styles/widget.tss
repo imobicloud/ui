@@ -1,0 +1,9 @@
+".slider": {  }
+	".slider-track": { width: 1, opacity: 0 }
+	".slider-thumb": { zIndex: 1, opacity: 0 }
+	".slider-start": { touchEnabled: false }
+	".slider-end":   { touchEnabled: false }
+	// ".slider-track-[tssclass]-1": {  }
+	// ".slider-thumb-[tssclass]-1": {  }
+	// ".slider-track-[tssclass]-2": {  }
+	// ".slider-thumb-[tssclass]-2": {  }

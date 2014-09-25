@@ -1,0 +1,28 @@
+loadContent(arguments[0] || {});
+
+exports.show = function() {
+	var dialog = $.getView();
+	dialog.visible = true;
+	dialog.animate({ opacity : 1 });
+};
+
+function hideDialog(e) {
+	var dialog = $.getView();
+	dialog.animate({ opacity : 0 }, function() { 
+		dialog.visible = false; 
+	});
+}
+
+exports.hide = hideDialog;
+
+function loadContent(args) {
+	if (args.children) {
+		_.each(args.children, function(child) {
+			$.container.add(child);
+		});
+		
+		delete args.id;
+		delete args.__parentSymbol;
+		delete args.children;
+	}
+}

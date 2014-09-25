@@ -1,0 +1,11 @@
+/*
+".toast-container": { height: Ti.UI.SIZE }
+".toast-error": { backgroundColor: '#dd4b39' }
+".toast-info": { backgroundColor: '#3B5998' }
+".toast-success": { backgroundColor: '#0eac4b' }	
+	".toast-wrapper": { height: Ti.UI.SIZE, top: 10, right: 10, bottom: 10, layout: 'horizontal' }
+		".toast-icon": { width: 50, height: 50, top: 0, left: 10, touchEnabled: false }
+		".toast-inner": { height: Ti.UI.SIZE, top: 0, left: 10, layout: 'vertical', touchEnabled: false }
+			".toast-title": { left: 0, color: '#fff', font: { fontSize: 15, fontWeight: 'bold' }, touchEnabled: false }
+			".toast-message": { left: 0, color: '#fff', font: { fontSize: 14 }, touchEnabled: false }
+*/

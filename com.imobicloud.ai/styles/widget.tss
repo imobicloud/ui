@@ -1,0 +1,6 @@
+"#ai": { zIndex: 100, backgroundColor: '#80000000', visible: false, top: 0, left: 0 }
+	".wrapper": { width: Ti.UI.SIZE, height: Ti.UI.SIZE, borderRadius: 10, backgroundColor: "#E6000000", layout: 'vertical' }
+		"#loadingSpinner": { color: '#fff', top: 20 }
+		"#loadingSpinner[platform=ios]": { style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG }
+		"#loadingSpinner[platform=android]": { style: Ti.UI.ActivityIndicatorStyle.BIG }
+		"#loadingMessage": { font: { fontSize: 14 }, color: '#fff', textAlign: 'center', width: Ti.UI.SIZE, height: Ti.UI.SIZE, top: 10, right: 30, bottom: 20, left: 30 }
