@@ -1,0 +1,12 @@
+<Alloy>
+	<View id="calendar" class="calendar-month">
+	    
+	    <Label id="lblMonth" class="calendar-month-title"/>
+	    
+	    <View class="calendar-month-wrapper">
+		    <View id="weekContainer" class="calendar-week-container"/>
+		    <View id="dateContainer" class="calendar-date-container"/>
+	    </View>
+	    
+	</View>
+</Alloy>

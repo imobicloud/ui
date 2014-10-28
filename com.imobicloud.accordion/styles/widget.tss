@@ -1,0 +1,1 @@
+".accordion-container": { height: Ti.UI.SIZE, top: 25, layout: 'vertical', backgroundColor: '#d6d6d6' }

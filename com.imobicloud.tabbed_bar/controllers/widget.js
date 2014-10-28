@@ -17,7 +17,7 @@ exports.init = function(params) {
 	var labels = params.labels,
 		index = params.index,
 		tssClass = params.tssClass;
-		
+
 	for(var i=0,ii=labels.length; i<ii; i++){
 		var classes = 'tabbed-bar-button ';
 		(i === index) && (classes += 'tabbed-bar-button-active ');
@@ -29,6 +29,11 @@ exports.init = function(params) {
 	$.tabbedBar.index = index;
 	
 	onClick = params.onClick || function() {};
+};
+
+exports.unload = function() {
+	onClick = null;
+	$.tabbedBar.removeAllChildren();
 };
 
 function tabbedBarClicked(e) {

@@ -1,1 +1,1 @@
-"#container": { bottom: 0 }
+"#container": { height: Ti.UI.SIZE, bottom: 0 }

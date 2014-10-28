@@ -1,5 +1,7 @@
 var config,
-	textfield;
+	keyboardHeight,
+	totalHeight,
+	time;
 
 init(arguments[0] || {});
 function init(args) {
@@ -9,42 +11,89 @@ function init(args) {
 		});
 		
 		delete args.id;
-		delete args.__parentSymbol;
 		delete args.children;
 	}
 }
 
+
 /*
  params = {
- 	toolbarHeight: 40,
- 	keyboardHeight: 216
+ 	height: 40,
+ 	textfield: txt,
+ 	persistent: false,
+ 	window: win
  }
  * */
-exports.init = function(txt, params) {
-	textfield = txt.parent;
+exports.init = function(params) {
+	config = _.extend({ height: 40, persistent: false }, params);
 	
-	config = params || {};
-	config.keyboardHeight == null && (config.keyboardHeight = 216);
-	config.toolbarHeight  == null && (config.toolbarHeight  = 40);
-	config.totalHeight = config.toolbarHeight + config.keyboardHeight;
+	config.textfield.bottom = config.height;
 	
-	if (OS_ANDROID) {
-		txt.addEventListener('blur', show);
-		txt.addEventListener('click', hide);
+	if (OS_IOS) {
+		Ti.App.addEventListener('keyboardframechanged', updateUI);
+	} else {
+		config.textfield.addEventListener('click', toggle);
+		config.textfield.addEventListener('focus', toggle);
+		config.textfield.addEventListener('blur', toggle);
 	}
-	
-	textfield.bottom = config.totalHeight;
-	$.container.height = config.totalHeight;
 };
 
-function show(e) {
-	textfield.bottom = config.totalHeight;
-  	$.container.bottom = 0;
-}
-exports.show = show;
+exports.unload = function() {
+	if (OS_IOS) {
+		Ti.App.removeEventListener('keyboardframechanged', updateUI);
+	} else {
+		config.textfield.removeEventListener('click', toggle);
+		config.textfield.removeEventListener('focus', toggle);
+		config.textfield.removeEventListener('blur', toggle);
+	}
+	
+	config = null;
+};
 
-function hide(e) {
-	textfield.bottom = config.toolbarHeight;
-  	$.container.bottom = -config.keyboardHeight;
+function updateUI(e) {
+	if (Ti.App.keyboardVisible) {
+		keyboardHeight = e.keyboardFrame.height;
+		totalHeight = keyboardHeight + config.height;
+		
+		config.textfield.bottom = totalHeight;
+  		$.container.bottom = keyboardHeight;
+  		
+  		fireEvent(true);
+	} else {
+		if (config.persistent !== true) {
+			config.textfield.bottom = config.height;
+	  		$.container.bottom = 0;
+		}
+		
+		fireEvent(false);
+	}
 }
-exports.hide = hide;
+
+function toggle(e) {
+	var now = new Date().getTime();
+	if (e.type != 'blur') {
+		// TODO: Android: blur also fire focus event
+		if (now - time < 500) { return; }
+		
+		if (keyboardHeight == null) {
+			keyboardHeight = 300; //TODO: get Keyboard size
+			totalHeight = keyboardHeight + config.height;
+		}
+		
+		config.textfield.bottom = config.height;
+  		$.container.bottom = 0;
+		
+		fireEvent(true);
+	} else {
+		time = now;
+		
+		config.textfield.bottom = totalHeight;
+  		$.container.bottom = keyboardHeight;
+		
+		fireEvent(false);
+	}
+}
+
+function fireEvent(visible) {
+  	config.textfield.fireEvent('keyboard:toggle', { visible: visible, height: keyboardHeight });
+}
