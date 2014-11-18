@@ -7,38 +7,29 @@ function init() {
 		template = args.template || 'title';
 		
 	for(var i=0,ii=args.rows.length; i<ii; i++){
-		var row = args.rows[i],
-			accessoryType = i === args.selectedRow ? Ti.UI.LIST_ACCESSORY_TYPE_CHECKMARK : Ti.UI.LIST_ACCESSORY_TYPE_NONE;
+		var row = args.rows[i];
 	  	items.push({
 	  		template: template,
-	  		properties: { itemId: row.id, accessoryType: accessoryType },
+	  		properties: { itemId: row.id },
 	  		icon: { image: row.icon },
 	  		title: { text: row.title }
 	  	});
 	};
 	
-	//
-	
 	$.column.sections = [Ti.UI.createListSection({ items: items })];
 };
 
 function columnClick(e) {
-	var index = e.itemIndex;
-	if (index === selectedIndex) {
-		return;
-	}
-	
-	var section = e.section;
+	var index = e.itemIndex,
+	    section = e.section;
 	
 	if (selectedIndex != null) {
-		var last = section.getItemAt(selectedIndex);
-		last.properties.accessoryType = Ti.UI.LIST_ACCESSORY_TYPE_NONE;
-		section.updateItemAt(selectedIndex, last);
+		args.onChange(e, selectedIndex, false);
 	}
 	
+	args.onChange(e, index, true);
+	
 	var item = section.getItemAt(index);
-	item.properties.accessoryType = Ti.UI.LIST_ACCESSORY_TYPE_CHECKMARK;
-	section.updateItemAt(index, item);
 	
   	$.column.fireEvent('picker:change', {
   		id: e.itemId,

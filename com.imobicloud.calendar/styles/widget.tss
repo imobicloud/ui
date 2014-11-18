@@ -1,25 +1,20 @@
 /*
-".calendar-container": { height: Ti.UI.SIZE, top: 0 }
+".calendar-container": { width: 320, height: Ti.UI.SIZE, top: 0 }
 	".calendar-wrapper": { height: Ti.UI.SIZE, top: 0 }
 		".calendar-month": { height: Ti.UI.SIZE, top: 0, layout: 'vertical' }
 			".calendar-month-title": { width: '100%', height: 53, backgroundColor: '#fff', color: '#000', font: { fontSize: 18, fontFamily: 'HelveticaNeue-Light' }, textAlign: 'center' }
 			".calendar-month-wrapper": { height: Ti.UI.SIZE, layout: 'vertical', backgroundColor: '#d6d6d6' }	
-				".calendar-week-container": { height: 32, top: 1, layout: 'horizontal', backgroundColor: '#fff' }
-				".calendar-week-container[platform=ios]": { top: 0.5 }
-					".calendar-week": { width: 45, height: 32, left: 1, backgroundColor: '#00b2ff' }
-					".calendar-week[platform=ios]": { left: 0.5 }
+				".calendar-week-container": { height: 32, top: 0.5, layout: 'horizontal', backgroundColor: '#fff' }
+					".calendar-week": { width: 45, height: 32, left: 0.5, backgroundColor: '#00b2ff' }
 						".calendar-week-label": { color: '#fff', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' } }
-				".calendar-date-container": { height: Ti.UI.SIZE, bottom: 1, layout: 'horizontal' }
-				".calendar-date-container[platform=ios]": { bottom: 0.5 }
-					".calendar-date": { width: 45, height: 33, top: 1, left: 1, backgroundColor: '#fff' }
-					".calendar-date[platform=ios]": { top: 0.5, left: 0.5 }
+				".calendar-date-container": { height: Ti.UI.SIZE, bottom: 0.5, layout: 'horizontal' }
+					".calendar-date": { width: 45, height: 33, top: 0.5, left: 0.5, backgroundColor: '#fff' }
 						".calendar-date-label": { color: '#5e5e5e', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' }, touchEnabled: false }
 					".calendar-date-today": { backgroundColor: '#f1f1f1' }
 						".calendar-date-today-label": { color: '#000' }
 					".calendar-date-disabled": { backgroundColor: '#fff', touchEnabled: false }
 						".calendar-date-disabled-label": { color: '#dbdbdb' }
 				".calendar-column-0": { width: 46, left: 0 }
-				".calendar-column-0[platform=ios]": { left: 0 }
 				".calendar-column-6": { width: 46 }
 	".calendar-button": { width: 50, height: 53, top: 0, zIndex: 1 }
 	".calendar-button-prev": { left: 0 }

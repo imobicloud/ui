@@ -15,13 +15,7 @@ function init() {
 				$.addClass($.message, 'toast-message-' + classes);
 	
 	if (args.icon) {
-		
-		if (args.icon.image) {
-			$.icon.image = args.icon.image;
-		} else {
-			$.icon.backgroundColor = args.icon.backgroundColor;
-		}
-		
+		$.icon.image = args.icon;
 	} else {
 		$.icon.parent.remove($.icon);
 		$.icon = null;

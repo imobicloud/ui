@@ -12,7 +12,12 @@ var selectedValues = [];
  			title: ''
  		}],
  		selectedRow: 0 // row index
- 	}]
+ 	}],
+ 	onChange: function(e, index, isSelected) {
+		var item = e.section.getItemAt(index);
+		item.properties.accessoryType = isSelected ? Ti.UI.LIST_ACCESSORY_TYPE_CHECKMARK : Ti.UI.LIST_ACCESSORY_TYPE_NONE;
+		e.section.updateItemAt(index, item);
+	}
  }
  * */
 exports.init = function (args) {
@@ -30,12 +35,18 @@ exports.init = function (args) {
 				wrapper.add(headerView);
 			}
 			
+			column.onChange = args.onChange || function() {};
+			
 			var view = Widget.createController('column', column).getView();
 			view.addEventListener('picker:change', pickerChange);
 		  	wrapper.add(view);
 	  	
 	  	$.picker.add(wrapper);
 	};
+};
+
+exports.reset = function () {
+    selectedValues = [];
 };
 
 function pickerChange(e) {

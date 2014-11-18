@@ -4,9 +4,9 @@
 		".picker-header": { height: 32, top: 0, backgroundColor: '#484d57' }
 			".picker-header-label": { left: 10, color: '#fff', font: { fontSize: 12, fontWeight: 'bold' } }
 		".picker-list": { top: 32, separatorInsets: { left: 0, right: 0 }, separatorColor: '#e7e7e7', backgroundColor: '#f7f9f9' }
-			".picker-item": { height: 42, backgroundColor: 'transparent' }	
-				".picker-item-icon": { left: 10, width: 32, height: 32 }
-				".picker-item-title": { left: 52, color: '#222', font: { fontSize: 16 } }
+			".picker-item": { height: 42, backgroundColor: 'transparent', selectedBackgroundColor: 'transparent' }	
+				".picker-item-icon": { left: 10, width: 32, height: 32, touchEnabled: false }
+				".picker-item-title": { left: 52, color: '#222', font: { fontSize: 16 }, touchEnabled: false }
 	".column-xxx": { width: '50%', left: 0 }
 	".column-yyy": { width: '50%', left: '50%' }
 */
