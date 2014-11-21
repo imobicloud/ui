@@ -13,7 +13,8 @@ function init(args) {
 };
 
 function loadWeek() {
-  	var weekNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  	// var weekNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  	var weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   	
   	for (var i = 0; i < 7; i++) {
   		var vDate = $.UI.create('View', { classes: 'calendar-week calendar-column-' + i });
@@ -25,7 +26,8 @@ function loadWeek() {
 function loadDate(time, currentMonth) {
 	var column = 0,
 		dayIndex = time.day(), // Sunday as 0 and Saturday as 6
-  		prevMonth = time.subtract('days', ( dayIndex ? dayIndex : 7 ) - 1),
+  		// prevMonth = time.subtract('days', ( dayIndex ? dayIndex : 7 ) - 1),
+  		prevMonth = time.subtract('days', dayIndex),
   		today = moment().startOf('hour').hour(0).toDate().getTime() + '';// get today's time stamp without hours, minutes and seconds
   	
   	for (var i = 0; i < 42; i++) {

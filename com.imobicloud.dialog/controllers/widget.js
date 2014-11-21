@@ -19,7 +19,6 @@ exports.hide = hideDialog;
 
 /*
  args = {
- 	classes: '',
  	persistent: 'false',
  	visible: 'false'
  }
@@ -29,13 +28,10 @@ function loadContent(args) {
 		$.overlay.addEventListener('click', hideDialog);
 	}
 	
-	if (args.classes) {
-		$.addClass($.container, args.classes);
-	}
-	
 	if (args.children) {
+		var container = $.getView();
 		_.each(args.children, function(child) {
-			$.container.add(child);
+			container.add(child);
 		});
 		
 		delete args.id;
