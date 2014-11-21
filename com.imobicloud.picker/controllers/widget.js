@@ -1,4 +1,4 @@
-var selectedValues = [];
+var controllers = [];
 
 /*
  args = {
@@ -12,53 +12,61 @@ var selectedValues = [];
  			title: ''
  		}],
  		selectedRow: 0 // row index
- 	}],
- 	onChange: function(e, index, isSelected) {
-		var item = e.section.getItemAt(index);
-		item.properties.accessoryType = isSelected ? Ti.UI.LIST_ACCESSORY_TYPE_CHECKMARK : Ti.UI.LIST_ACCESSORY_TYPE_NONE;
-		e.section.updateItemAt(index, item);
-	}
+ 	}]
  }
+ 
+ $.datePicker.on('picker:change', function(e) {
+	var item = e.section.getItemAt(e.rowIndex);
+	item.properties.accessoryType = e.isSelected ? Ti.UI.LIST_ACCESSORY_TYPE_CHECKMARK : Ti.UI.LIST_ACCESSORY_TYPE_NONE;
+	e.section.updateItemAt(e.rowIndex, item);
+});
  * */
 exports.init = function (args) {
 	for(var i=0,ii=args.columns.length; i<ii; i++){
 		var column = args.columns[i];
-		column.index = i;
+		column.columnIndex = i;
 		
-		selectedValues.push(column.selectedRow);
-		
-		var wrapper = $.UI.create('View', { classes: 'picker-column ' + column.classes });
-		
-			if (column.title) {
-				var headerView = $.UI.create('View', { classes: 'picker-header' });
-					headerView.add( $.UI.create('Label', { text: column.title, classes: 'picker-header-label' }) );
-				wrapper.add(headerView);
-			}
-			
-			column.onChange = args.onChange || function() {};
-			
-			var view = Widget.createController('column', column).getView();
-			view.addEventListener('picker:change', pickerChange);
-		  	wrapper.add(view);
+		var controller = Widget.createController('column', column);
+		controllers.push(controller);  	
 	  	
-	  	$.picker.add(wrapper);
+	  	$.picker.add( controller.getView() );
 	};
 };
 
-exports.reset = function () {
-    selectedValues = [];
+exports.unload = function() {
+	for(var i = 0, ii = controllers.length; i < ii; i++) {
+      	controllers[i].unload();
+    };
+    controllers.length = 0;
 };
 
-function pickerChange(e) {
-	e.source = null;
-	selectedValues[e.columnIndex] = e;
-  	$.picker.fireEvent('picker:change', e);
-}
+exports.reset = function () {
+    for(var i = 0, ii = controllers.length; i < ii; i++) {
+      	controllers[i].reset();
+    };
+};
+
+exports.setSelectedRow = function(columnIndex, rowIndex, animated) {
+	controllers[columnIndex] && controllers[columnIndex].setSelectedRow(rowIndex, animated);
+};
 
 exports.getSelectedRow = function(columnIndex) {
-	return selectedValues[columnIndex];
+	return controllers[columnIndex] ? controllers[columnIndex].getSelectedRow() : null;
 };
 
-exports.getSelectedValues = function() {
-	return selectedValues;
+exports.getSelectedRows = function() {
+	var selectedRows = [];
+	for(var i = 0, ii = controllers.length; i < ii; i++) {
+      	selectedRows.push( controllers[i].getSelectedRow() );
+    };
+	return selectedRows;
+};
+
+// EVENTS
+
+exports.on = function(type, callback) {
+	for(var i = 0, ii = controllers.length; i < ii; i++) {
+		controllers[i].on(type, callback);
+    };
+  	return this;
 };
