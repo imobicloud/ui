@@ -4,20 +4,6 @@ var args = arguments[0] || {},
 
 init();
 function init() {
-	var container = $.column;
-	
-	$.addClass(container, args.classes);
-		
-	if (args.title) {
-		var headerView = $.UI.create('View', { classes: 'picker-header' });
-			headerView.add( $.UI.create('Label', { text: args.title, classes: 'picker-header-label' }) );
-		container.add(headerView);
-	} else {
-		$.addClass($.list, 'picker-list-notitle');
-	}
-		
-	//
-	
 	var items = [],
 		template = args.template || 'title';
 		
@@ -31,11 +17,12 @@ function init() {
 	  	});
 	};
 	
+	$.addClass($.list, args.classes);
 	$.list.sections = [Ti.UI.createListSection({ items: items })];
 };
 
 function postlayout(e) {
-	$.column.removeEventListener('postlayout', postlayout);
+	$.list.removeEventListener('postlayout', postlayout);
   	selectedIndex = args.selectedRow || 0;
 	updateUI(selectedIndex, true, false);
 }

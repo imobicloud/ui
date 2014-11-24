@@ -1,0 +1,3 @@
+<Alloy>
+	<Picker id="picker" class="picker-body" onChange="pickerChange" onPostlayout="postlayout"></Picker>
+</Alloy>

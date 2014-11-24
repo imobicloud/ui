@@ -1,3 +1,3 @@
 <Alloy>
-	<View id="picker" class="picker"></View>
+	<View id="container" class="picker"></View>
 </Alloy>
