@@ -10,4 +10,5 @@
 				
 	".column-xxx": { width: '50%', left: 0 }
 	".column-yyy": { width: '50%', left: '50%' }
+	".column-yyy[platform=ios]": { width: 100, left: 100 } // IOS: width mus be a number
 */

@@ -51,6 +51,9 @@ exports.unload = function() {
 };
 
 function updateUI(e) {
+	// IOS bug: after removeEventListener, this function is still run
+	if (config == null) { return; }
+	
 	if (Ti.App.keyboardVisible) {
 		keyboardHeight = e.keyboardFrame.height;
 		totalHeight = keyboardHeight + config.height;

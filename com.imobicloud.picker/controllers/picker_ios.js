@@ -7,6 +7,8 @@ exports.init = function (args) {
 		var column = args.columns[i],
 			pickerColumn = Ti.UI.createPickerColumn();
 		
+		$.addClass(pickerColumn, column.classes);
+		
 		for(var j=0,jj=column.rows.length; j<jj; j++){
 			pickerColumn.addRow( Ti.UI.createPickerRow(column.rows[j]) );
 		};		
