@@ -1,0 +1,3 @@
+<Alloy>
+	<WebView id="container" onLoad="wvLoaded"/>
+</Alloy>

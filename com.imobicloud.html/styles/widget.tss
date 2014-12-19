@@ -1,0 +1,2 @@
+"#container": { enableZoomControls: false, backgroundColor: 'transparent' }
+'#container[platform=android]': { softKeyboardOnFocus: Ti.UI.Android.SOFT_KEYBOARD_HIDE_ON_FOCUS }
