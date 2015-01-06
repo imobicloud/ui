@@ -21,6 +21,8 @@ function init(params) {
   	$.container.url = params.url;
   	
   	Ti.App.addEventListener(args.eventName,  fireEvent);
+  	
+  	Ti.API.info('com.imobicloud.html:load ' + args.eventName);
 }
 
 exports.unload = function() {
@@ -31,30 +33,18 @@ exports.unload = function() {
 	
   	Ti.App.removeEventListener(args.eventName,  fireEvent);
   	
-	// fix scroll to top for iOS
-	if (OS_IOS) {
-		$.fakeScroller.scrollsToTop = false;
-	}
-  	
   	// if (OS_ANDROID) {
   		// $.container.release();
   	// }
+  	
+  	Ti.API.info('com.imobicloud.html:unload ' + args.eventName);
 };
 
 /*
  params = {
- 	callback: '',
- 	params: {}
+ 	callback: '', 	// name of the function you want to run
+ 	params: {}		// params for that function
  }
- 
- callback can be: 
- 	init
- 	updateByTemplate
- 	updateByHtml
- 	loadCarousel
-  	updateElement
-  	showAI
-  	hideAI
  * */
 exports.run = function(params) {
 	vars.cache.push( params );
@@ -88,14 +78,6 @@ function run(params, key) {
 	$.container.evalJS( 'vars.templatePromise.promise().then(function(){ ' + key + str + ' });' );
 }
 
-// fix scroll to top for iOS
-function fixScrollIOS(e) {
-  	if (e.y === 0) {
-       	$.container.evalJS( 'updateViewport({ scrollToTop: true });' );
-        $.fakeScroller.setContentOffset({ x: 0, y: 500 }, false );
-    }
-}
-
 function wvLoaded(e) {
   	vars.wvReady = true;
   	$.container.evalJS( 'init(' + JSON.stringify(args) + ');' );
@@ -115,22 +97,7 @@ exports.on = function(type, callback) {
 };
 
 function fireEvent(e) {
-	Ti.API.error('fireEvent: ' + JSON.stringify( e ));
-
-	// if (e.clickAction == '' && e.url) {
-		// var urlRegex    = new RegExp("^(http|https)://", "i");
-		// var phoneRegex  = /(\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-.]([0-9]{4}))/gi;
-		// // Check if href not a phone number
-		// if ( !phoneRegex.test( e.url ) ) {
-			// // Check href don't have http://
-			// if ( !urlRegex.test( e.url ) ) {
-				// var regUrl = /(((http:\/\/www\.)|(www\.)|(http:\/\/))[a-zA-Z0-9._-]+\.[a-zA-Z.]{2,5}$)/gi;
-				// e.url = 'http://' + e.url.match( regUrl );
-			// }
-		// }
-		// Ti.Platform.openURL( e.url );
-		// return false;
-	// }
+	Ti.API.info('com.imobicloud.html:fireEvent ' + JSON.stringify( e ));
 	
   	var callbacks = events[e.etype];
   	if (callbacks) {
