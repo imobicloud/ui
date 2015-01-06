@@ -1,50 +1,27 @@
 var args,
-	vars,
-	callbacks;
+	vars;
 
 init(arguments[0]);
 
 /*
  params = {
- 	url: '/webview/html/index.html',
- 	onClick: function(e){},
- 	onLongpress: function(e){},
- 	onHidekeyboard: function(e){}
+ 	eventName: 'app:comment',
+ 	template: 'stories',
+ 	url: '/webview/html/index.html'
  }
  * */
 function init(params) {
-  	$.container.url = params.url;
-}
-
-/*
- params = {
- 	eventName: 'app:comment', // required
- 	longPressElement: '.comment-wrapper',
- 	template: 'stories',
- 	infinite: false
- }
- 
- callbacks = {
- 	reloadCallback: function(){}
- }
- */
-exports.init = function(params, _callbacks) {
 	args = params;
-	callbacks = _callbacks;
+	args.eventName += '_' + new Date().getTime();
+	
 	vars = {
 		cache: [] // cache evalJS call, when webview is not ready, evalJS not run, have to wait for it ready
 	};
 	
-	args.eventName += '_' + new Date().getTime() + '_';
-	
-	Ti.App.addEventListener(args.eventName + 'Click',  htmlClick);
-	Ti.App.addEventListener(args.eventName + 'LongPress', htmlLongpress);
-	Ti.App.addEventListener(args.eventName + 'HideKeyboard', hideKeyboard);
-	
-	if (callbacks.reloadCallback) {
-        Ti.App.addEventListener(args.eventName + 'Reload', callbacks.reloadCallback);
-    }
-};
+  	$.container.url = params.url;
+  	
+  	Ti.App.addEventListener(args.eventName,  fireEvent);
+}
 
 exports.unload = function() {
 	if (vars.timeout) {
@@ -52,13 +29,7 @@ exports.unload = function() {
 		vars.timeout = null;
 	}
 	
-  	Ti.App.removeEventListener(args.eventName + 'Click',  htmlClick);
-  	Ti.App.removeEventListener(args.eventName + 'LongPress', htmlLongpress);
-  	Ti.App.removeEventListener(args.eventName + 'HideKeyboard', hideKeyboard);
-  	
-  	if (callbacks.reloadCallback) {
-        Ti.App.removeEventListener(args.eventName + 'Reload', callbacks.reloadCallback);
-    }
+  	Ti.App.removeEventListener(args.eventName,  fireEvent);
   	
 	// fix scroll to top for iOS
 	if (OS_IOS) {
@@ -114,7 +85,7 @@ function run(params, key) {
 		str = '("");';
 	}
 	
-	$.container.evalJS( key + str );
+	$.container.evalJS( 'vars.templatePromise.promise().then(function(){ ' + key + str + ' });' );
 }
 
 // fix scroll to top for iOS
@@ -130,31 +101,41 @@ function wvLoaded(e) {
   	$.container.evalJS( 'init(' + JSON.stringify(args) + ');' );
 }
 
-function htmlClick(e) {
-	Ti.API.error('htmlClick: ' + JSON.stringify( e ));
-	
-	if (e.clickAction == '' && e.url) {
-		var urlRegex    = new RegExp("^(http|https)://", "i");
-		var phoneRegex  = /(\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-.]([0-9]{4}))/gi;
-		// Check if href not a phone number
-		if ( !phoneRegex.test( e.url ) ) {
-			// Check href don't have http://
-			if ( !urlRegex.test( e.url ) ) {
-				var regUrl = /(((http:\/\/www\.)|(www\.)|(http:\/\/))[a-zA-Z0-9._-]+\.[a-zA-Z.]{2,5}$)/gi;
-				e.url = 'http://' + e.url.match( regUrl );
-			}
-		}
-		Ti.Platform.openURL( e.url );
-		return false;
-	}
-	
-  	$.trigger('click', e);
-}
+//
 
-function htmlLongpress(e) {
-  	$.trigger('longpress', e);
-}
+var events = {};
 
-function hideKeyboard(e) {
-  	$.trigger('hidekeyboard', e);
+exports.on = function(type, callback) {
+	if (events[type]) {
+  		events[type].push(callback);
+  	} else {
+  		events[type] = [callback];
+  	}
+  	return this;
+};
+
+function fireEvent(e) {
+	Ti.API.error('fireEvent: ' + JSON.stringify( e ));
+
+	// if (e.clickAction == '' && e.url) {
+		// var urlRegex    = new RegExp("^(http|https)://", "i");
+		// var phoneRegex  = /(\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-.]([0-9]{4}))/gi;
+		// // Check if href not a phone number
+		// if ( !phoneRegex.test( e.url ) ) {
+			// // Check href don't have http://
+			// if ( !urlRegex.test( e.url ) ) {
+				// var regUrl = /(((http:\/\/www\.)|(www\.)|(http:\/\/))[a-zA-Z0-9._-]+\.[a-zA-Z.]{2,5}$)/gi;
+				// e.url = 'http://' + e.url.match( regUrl );
+			// }
+		// }
+		// Ti.Platform.openURL( e.url );
+		// return false;
+	// }
+	
+  	var callbacks = events[e.etype];
+  	if (callbacks) {
+  		for(var i=0,ii=callbacks.length; i<ii; i++){
+			callbacks[i](e);
+		};
+  	}
 }

@@ -1,0 +1,26 @@
+.comment { border-bottom: 1px solid #d6d6d6; position: relative; min-height: 72px; }
+.comment:first-child { margin-top: 16px; }
+	.author-photo { width: 40px; height: 40px; position: absolute; top: 0; left: 0; }
+		.author-photo > img { width: 40px; height: 40px; }
+	.comment-header { margin: 10px 0 3px 56px; }
+		.author-name { float: left; font-size: 14px; }
+		.comment-time { float: right; color: #999; font-size: 14px; }
+	.comment-content { margin: 0 0 10px 56px; color: #000; font-size: 14px; }	
+	.comment-quote { margin: 10px 2px 10px 56px; background-color: #f0f0f0; position: relative; min-height: 62px; box-shadow: 1px 1px 2px 0px rgba(50, 50, 50, 0.5); }	
+		.quote-photo { width: 30px; height: 30px; position: absolute; top: 16px; left: 16px; }
+			.quote-photo > img { width: 30px; height: 30px; }
+		.quote-header { padding: 16px 16px 3px 62px; }
+			.quote-name { font-size: 12px; }
+			.quote-link { float: right; font-size: 12px; }
+		.quote-content { padding: 0 16px 10px 62px; font-size: 12px; }	
+		
+	.comment-table { border: 1px solid gray; border-collapse: collapse; border-spacing: 0; }
+		.comment-table td { padding: 5px 7px 3px; border: 1px solid gray; }	
+	
+	.comment-image { height: 300px; }
+	.quote-content .comment-image { height: 200px; }
+	
+	
+@media only screen and (min-width : 480px) {
+	
+}

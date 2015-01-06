@@ -1,0 +1,12 @@
+.nav { height: 36px; }
+	.nav-button { float: left; width: 20%; height: 36px; font-size: 14px; text-align: center; line-height: 36px; }
+	.nav-first {  }
+	.nav-prev {  }
+	.nav-next { float: right; }
+	.nav-last { float: right; }
+	.nav-current {  }
+#comments { margin: 0 16px; overflow: hidden; }	
+	
+@media only screen and (min-width : 480px) {
+	
+}
