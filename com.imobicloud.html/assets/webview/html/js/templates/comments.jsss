@@ -1,11 +1,17 @@
-globals[ 'comments' + 'Deferred' ].resolve();
+eventjs.add(window, "swipe", onSwipe);
 
-$.templates('comments', '\
-	<div id="comments"></div>\
-	<div class="nav-container"></div>\
-	<script src="js/Event.min.js"></script>\
-	<script>eventjs.add(window, "swipe", onSwipe);</script>\
-');
+function loadUI() {
+  	$('#app').html('<div id="comments"></div><div class="nav-container"></div>');
+  	$('#app').on('click', UTILS.onClick);
+}
+
+function loadComments(params) {
+	$('#comments').html( UTILS.render(params) );
+	
+	updateNav(params);
+	
+	UTILS.scroll();
+}
 
 function updateNav(params) {
 	var html = [];
@@ -43,7 +49,7 @@ function updateNav(params) {
 function resetComments() {
   	$('#comments').html('');
   	$('.nav-container').hide();
-  	showAI();
+  	UTILS.showAI();
 }
 
 function resizeImage(e) {
@@ -54,5 +60,5 @@ function resizeImage(e) {
 
 function onSwipe(e, self) {
 	var direction = { 0: 'up', 90: 'right', 180: 'down', 270: 'left' };
-	fireEvent(e, 'swipe', { direction: direction[self.angle] });
+	UTILS.fireEvent(e, 'swipe', { direction: direction[self.angle] });
 }

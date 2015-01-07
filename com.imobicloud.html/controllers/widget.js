@@ -1,43 +1,57 @@
-var args,
-	vars;
+var eventName = 'app:' + new Date().getTime(),
+	cache = [{
+		callback: 'UTILS.init',
+		params: eventName
+	}],
+	wvReady = false;
 
 init(arguments[0]);
 
 /*
  params = {
- 	eventName: 'app:comment',
- 	template: 'stories',
+ 	csss: 'templates/stories,templates/comment',
+ 	scripts: 'libs/Event.min,templates/stories,templates/comment',
+ 	
  	url: '/webview/html/index.html'
  }
  * */
 function init(params) {
-	args = params;
-	args.eventName += '_' + new Date().getTime();
+	var html = Ti.Filesystem.getFile( Ti.Filesystem.resourcesDirectory, params.url || '/webview/html/index.html' ).read().toString(),
+  		csss = params.csss.split(','),
+  		scripts = params.scripts.split(','),
+  		css = [],
+  		script = [];
 	
-	vars = {
-		cache: [] // cache evalJS call, when webview is not ready, evalJS not run, have to wait for it ready
-	};
+	csss.unshift( 'index' );
+	scripts.unshift( 'libs/jquery-2.1.1.min', 'libs/fastclick', 'index' );
 	
-  	$.container.url = params.url;
+	for(var i=0,ii=csss.length; i<ii; i++){
+		css.push(' <link rel="stylesheet" href="webview/html/css/' + csss[i] + '.css"> ');
+	}
+	
+	for(var i=0,ii=scripts.length; i<ii; i++){
+		script.push(' <script src="webview/html/js/' + scripts[i] + '.jsss"></script> ');
+	}
+	
+	$.container.html = html
+		.replace('<!-- CSS PLACEHOLDER -->', css.join('\n\t'))
+		.replace('<!-- JS PLACEHOLDER -->', script.join('\n\t'));
+	
+  	//
   	
-  	Ti.App.addEventListener(args.eventName,  fireEvent);
+  	Ti.App.addEventListener(eventName,  fireEvent);
   	
-  	Ti.API.info('com.imobicloud.html:load ' + args.eventName);
+  	Ti.API.info('com.imobicloud.html:load ' + eventName);
 }
 
 exports.unload = function() {
-	if (vars.timeout) {
-		clearTimeout(vars.timeout);
-		vars.timeout = null;
-	}
-	
-  	Ti.App.removeEventListener(args.eventName,  fireEvent);
+  	Ti.App.removeEventListener(eventName,  fireEvent);
   	
   	// if (OS_ANDROID) {
   		// $.container.release();
   	// }
   	
-  	Ti.API.info('com.imobicloud.html:unload ' + args.eventName);
+  	Ti.API.info('com.imobicloud.html:unload ' + eventName);
 };
 
 /*
@@ -47,20 +61,17 @@ exports.unload = function() {
  }
  * */
 exports.run = function(params) {
-	vars.cache.push( params );
+	cache.push( params );
 	checkCondition();
 };
 
 function checkCondition() {
-  	if (vars.wvReady) {
-  		var cache = vars.cache;
+  	if (wvReady) {
   		while (cache.length) {
   			var call = cache[0];
 			run(call.params, call.callback);
 			cache.splice(0, 1);
 		}
-	} else {
-		vars.timeout = setTimeout(checkCondition, 300);
 	}
 }
 
@@ -75,12 +86,12 @@ function run(params, key) {
 		str = '("");';
 	}
 	
-	$.container.evalJS( 'vars.templatePromise.promise().then(function(){ ' + key + str + ' });' );
+	$.container.evalJS( key + str );
 }
 
 function wvLoaded(e) {
-  	vars.wvReady = true;
-  	$.container.evalJS( 'init(' + JSON.stringify(args) + ');' );
+  	wvReady = true;
+  	checkCondition();
 }
 
 //

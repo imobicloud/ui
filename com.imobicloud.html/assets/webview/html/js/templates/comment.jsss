@@ -1,5 +1,3 @@
-globals[ 'comment' + 'Deferred' ].resolve();
-
 $.templates({
 	comment: '\
 			<div class="comment">\
