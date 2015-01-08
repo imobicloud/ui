@@ -23,9 +23,12 @@ var UTILS = {
 	},
 	
 	fireEvent: function(e, type, data) {
-		e.preventDefault();
-		e.stopPropagation();
+		if (e) {
+			e.preventDefault();
+			e.stopPropagation();
+		}
 		
+		data == null && (data = {});
 		data.etype = type;
 		
 	  	Ti.App.fireEvent(eventName, data);
