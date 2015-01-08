@@ -17,8 +17,8 @@ init(arguments[0]);
  * */
 function init(params) {
 	var html = Ti.Filesystem.getFile( Ti.Filesystem.resourcesDirectory, params.url || '/webview/html/index.html' ).read().toString(),
-  		csss = params.csss.split(','),
-  		scripts = params.scripts.split(','),
+  		csss = params.csss ? params.csss.split(',') : [],
+  		scripts = params.scripts ? params.scripts.split(',') : [],
   		css = [],
   		script = [];
 	
