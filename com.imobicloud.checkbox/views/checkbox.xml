@@ -1,0 +1,6 @@
+<Alloy>
+	<View class="imc-checkbox" onClick="checkboxClick">
+		<ImageView id="icon" class="imc-checkbox-icon"></ImageView>
+		<Label id="title" class="imc-checkbox-title"></Label>
+	</View>
+</Alloy>

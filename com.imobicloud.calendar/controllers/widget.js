@@ -2,12 +2,18 @@ var moment = require('alloy/moment'),
 	events = {},
 	vars = {};
 
-exports.init = function() {
-	var oMoment = moment();
+exports.init = function(date) {
+	var oMoment = date || moment();
+	
 	vars.month = oMoment.month(); // 0 -> 11
 	vars.year = oMoment.year();
 	
 	loadCalendar();
+};
+
+exports.unload = function() {
+	vars.controller && $.calendarContainer.remove( vars.controller.getView() );
+	vars = null;
 };
 
 function loadCalendar() {
@@ -27,6 +33,8 @@ function loadCalendar() {
 	
 	fireEvent('monthChange', data);
 }
+
+exports.loadCalendar = loadCalendar;
 
 function loadPreviousMonth(e) {
 	if (vars.month != 0) {

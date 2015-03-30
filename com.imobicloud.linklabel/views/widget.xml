@@ -1,0 +1,4 @@
+<Alloy>
+	<Label id="label" platform="android" onClick="labelClick"></Label>
+	<TextArea id="label" platform="ios" onLink="labelLink"></TextArea>
+</Alloy>

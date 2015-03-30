@@ -1,0 +1,10 @@
+/*
+".imc-checkboxs": { width: Ti.UI.SIZE, height: Ti.UI.SIZE, top: 3, bottom: 12, layout: 'vertical' }
+	".imc-checkbox": { width: Ti.UI.SIZE, height: 34, left: 0 }
+		".imc-checkbox-icon": { width: 19, height: 19, left: 0, touchEnabled: false }
+		".imc-checkbox-icon-on":  { image: '/images/new-checkbox-on.png' }
+		".imc-checkbox-icon-off": { image: '/images/new-checkbox.png' }
+		".imc-checkbox-title": { left: 30, color: '#5b667e', font: { fontSize: 12, fontFamily: 'Exo2-Light' }, touchEnabled: false }
+		".imc-checkbox-title-on": {  }
+		".imc-checkbox-title-off": {  }
+*/

@@ -1,0 +1,6 @@
+<Alloy>
+	<View class="ET-container">
+		<Label id="hint" class="ET-hint" platform="ios">Enter message...</Label>
+		<TextArea id="textarea" class="ET-textarea" hintText="Enter message..." onChange="textareaChange"></TextArea>
+	</View>
+</Alloy>
