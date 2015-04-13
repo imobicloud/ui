@@ -1,6 +1,6 @@
 # Titanium UI - SliderUploader
 
-[Imgur](http://i.imgur.com/mJ82noZ.png)
+![Imgur](http://i.imgur.com/mJ82noZ.png)
 
 ====
 
