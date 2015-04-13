@@ -90,12 +90,9 @@ function touchmove(e) {
 	if (vars.thumbIndex == null) { return; }
 	
   	var pos = e.source.convertPointToView({ x: e.x, y: e.y }, $.slider);
-  	if (pos.x < vars.minX) {
-  		pos.x = vars.minX;
-  	}
-  	if (pos.x > vars.maxX) {
-  		pos.x = vars.maxX;
-  	}
+  	
+  	if (pos.x < vars.minX) { pos.x = vars.minX; }
+  	else if (pos.x > vars.maxX) { pos.x = vars.maxX; }
   	
   	var index = vars.thumbIndex,
   		width = pos.x - vars.minX;
@@ -116,14 +113,17 @@ exports.setValue = function(values) {
 	args.values = values;
 	
 	var y = vars.y,
+		max = args.max,
 		min = args.min,
 		minX = vars.minX,
 		partWidth = vars.partWidth;
 	
 	for(var i=0,j=values.length; i<j; i++){
-	  	var value = values[i],
-  			width = (value - min) * partWidth;
-  		
+	  	var value = values[i];
+	  	if (value < min) { value = min; }
+	  	else if (value > max) { value = max; }
+	  	
+  		var width = (value - min) * partWidth;
 		vars['track_' + i].width  = width;
 		vars['thumb_' + i].center = { x: minX + width, y: y };
 	};

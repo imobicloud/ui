@@ -1,20 +1,37 @@
-# Titanium UI - Uploader
+# Titanium UI - SliderUploader
+
+[Imgur](http://i.imgur.com/mJ82noZ.png)
 
 ====
 
-Show a dialog with 2 options: Take a photo or Load phote from gallery.
-After user select photo, return it via callback
-
-xml
+View
 	
-    <Require id="uploader" src="elements/uploader"/>
+    <Widget id="slider1" src="com.imobicloud.slider min="1" max="30" values="[10]" tssclass="players"></Widget>
+    <Widget id="slider2" src="com.imobicloud.slider min="1" max="30" values="[10,20,25]" tssclass="players"></Widget>
+    
+Styles
 
-js
+	".slider-players": { width: 227, height: 20, top: 20 }
+		".slider-players-target": { visible: false, touchEnabled: false }
+		".slider-players-track": { width: 207.5, height: 2, backgroundColor: '#a8adb0', borderRadius: 2, touchEnabled: false }
+		".slider-players-track-0": {  }
+		".slider-players-track-1": { backgroundColor: '#abdb92' }
+        ".slider-players-track-2": { backgroundColor: 'red' }
+		".slider-players-thumb": { width: 19, height: 20, backgroundImage: '/images/event_create/slider-handle.png', zIndex: 1 }
+		".slider-players-thumb-0": {  }
+		".slider-players-thumb-1": {  }	
+    	".slider-players-thumb-2": {  }	
+    
+Controller
 
-    function showCamera(e) {
-        $.uploader.show(showCameraCallback);
-    }
-
-    function showCameraCallback(e) {
-        // TODO: do something with e.media
+	// get value
+	$.slider1.getValue();	// => [20]
+    $.slider2.setValue();	// => [10,20,25]
+    
+    // set value
+	$.slider1.setValue([25]);	
+    $.slider2.setValue([15, 20, 30]);	
+    
+    function sliderChange(e){
+    	alert(e.indexmedia + ' ' + e.value);
     }
