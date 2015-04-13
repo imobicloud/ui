@@ -11,6 +11,9 @@ var args = arguments[0] || {},
 	vars = {},
 	prefix = 'slider-' + args.tssclass + '-';
 
+var measurement;
+OS_ANDROID && (measurement = require('alloy/measurement'));
+
 init();
 function init() {
 	// normalize data
@@ -35,8 +38,15 @@ function postlayout(e) {
   	
   	var y 			= this.rect.y,
   		trackWidth  = this.rect.width,
-  		sliderWidth = this.parent.rect.width,
-  		partWidth   = trackWidth / vars.range,
+  		sliderWidth = this.parent.rect.width;
+  	
+  	// if (OS_ANDROID) {
+  		// y = measurement.pxToDP(y);
+  		// trackWidth = measurement.pxToDP(trackWidth);
+  		// sliderWidth = measurement.pxToDP(sliderWidth);
+  	// }
+  		
+  	var partWidth   = trackWidth / vars.range,
   		minX		= (sliderWidth - trackWidth) / 2;
   		
   	vars.partWidth  = partWidth;
@@ -80,7 +90,6 @@ function postlayout(e) {
 function touchstart(e) {
 	e.cancelBubble = true;
 	vars.thumbIndex = e.source.thumbIndex;
-  	vars.x = e.x;
 }
 
 function touchend(e) {
@@ -98,6 +107,12 @@ function touchmove(e) {
 	if (vars.thumbIndex == null) { return; }
 	
   	var pos = e.source.convertPointToView({ x: e.x, y: e.y }, $.slider);
+  	
+  	if (OS_ANDROID) {
+  		pos.x = measurement.pxToDP(pos.x);
+  		pos.y = measurement.pxToDP(pos.y);
+  	}	
+  	
   	if (pos.x < vars.minX) { return; }
   	else if (pos.x > vars.maxX) { return; }
   	
