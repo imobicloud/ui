@@ -52,7 +52,8 @@ function postlayout(e) {
 		// };
 	// }
 	
-	var min = args.min, 
+	var pos = [],
+		min = args.min, 
 		values = args.values;
 		
   	for(var i=values.length - 1; i >= 0; i--){
@@ -63,10 +64,17 @@ function postlayout(e) {
 		vars['track_' + i] = track;
 		$.slider.add(track);
 		
-		var thumb = $.UI.create('View', { thumbIndex: i, classes: prefix + 'thumb' + ' ' + prefix + 'thumb-' + i, center: { x: minX + width, y: y } });
+		var center = { x: minX + width, y: y };
+		var thumb = $.UI.create('View', { thumbIndex: i, classes: prefix + 'thumb' + ' ' + prefix + 'thumb-' + i, center: center });
 		vars['thumb_' + i] = thumb;
 		$.slider.add(thumb);
+		
+		pos.unshift( center );	
 	};
+	
+	//
+	
+	$.trigger('ready', { pos: pos });
 }
 
 function touchstart(e) {
@@ -90,19 +98,30 @@ function touchmove(e) {
 	if (vars.thumbIndex == null) { return; }
 	
   	var pos = e.source.convertPointToView({ x: e.x, y: e.y }, $.slider);
-  	
-  	if (pos.x < vars.minX) { pos.x = vars.minX; }
-  	else if (pos.x > vars.maxX) { pos.x = vars.maxX; }
+  	if (pos.x < vars.minX) { return; }
+  	else if (pos.x > vars.maxX) { return; }
   	
   	var index = vars.thumbIndex,
-  		width = pos.x - vars.minX;
+  		width = pos.x - vars.minX,
+  		value = (width / vars.partWidth) + args.min;
+  		
+  	if (value - parseInt(value) >= 0.5) { 
+  		value = Math.ceil(value);
+  	} else {
+  		value = Math.floor(value);
+  	}
+  	
+  	var prev = args.values[index - 1];
+  	if (prev && value <= prev) { return; }
+  	var next = args.values[index + 1];
+  	if (next && value >= next) { return; }
+  	
   	vars['track_' + index].width  = width;
   	vars['thumb_' + index].center = { x: pos.x, y: vars.y };
   	
-  	var value = (width / vars.partWidth) + args.min;
   	args.values[index] = value; 
   	
-  	$.trigger('change', { index: index, value: value });
+  	$.trigger('change', { index: index, value: value, pos: { x: pos.x, y: pos.y } });
 }
 
 exports.getValue = function(roundUp) {

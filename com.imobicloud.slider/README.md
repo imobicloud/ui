@@ -6,7 +6,10 @@
 
 View
 	
-    <Widget id="slider1" src="com.imobicloud.slider min="1" max="30" values="[10]" tssclass="players"></Widget>
+	<!-- one thumb slider -->
+    <Widget id="slider1" src="com.imobicloud.slider min="1" max="30" values="[20]" tssclass="players"></Widget>
+
+    <!-- many thumb slider -->
     <Widget id="slider2" src="com.imobicloud.slider min="1" max="30" values="[10,20,25]" tssclass="players"></Widget>
     
 Styles
@@ -33,5 +36,15 @@ Controller
     $.slider2.setValue([15, 20, 30]);	
     
     function sliderChange(e){
-    	alert(e.indexmedia + ' ' + e.value);
+    	alert(e.index + ' ' + e.value);
     }
+
+Events
+
+- change
+	+ index: thumb index
+	+ value: thumb value
+	+ pos: position of thumb
+
+- ready: 
+	+ pos: array position of thumbs
