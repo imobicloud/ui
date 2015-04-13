@@ -92,4 +92,6 @@ function slide(index, animated) {
 	} else {
 		vars.slider.left = args.anchors[index];
 	}
+	
+	$.trigger('toggle', { index: index });
 }

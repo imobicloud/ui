@@ -1,7 +1,3 @@
 <Alloy>
-	<View id="slider" class="slider" onPostlayout="postlayout">
-		<View id="track" class="slider-track"></View>
-		<View class="slider-thumb slider-start"></View>
-		<View class="slider-thumb slider-end"></View>
-	</View>
+	<View id="slider" onTouchstart="touchstart" onTouchend="touchend" onTouchcancel="touchcancel" onTouchmove="touchmove"></View>
 </Alloy>

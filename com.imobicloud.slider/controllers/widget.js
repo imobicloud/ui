@@ -2,219 +2,129 @@
  args = {
  	min: 0,
  	max: 100,
- 	values: [20, 80],
- 	onChange: function(type, values){}
+ 	tssclass: '',
+ 	targets: [0, 20, 40, 60, 80, 100], // or null
+ 	values: [20, 80]
  }
  * */
 var args = arguments[0] || {},
-	handlers = {},
-	vars = {};
-
-exports.addEventListener = function(type, callback) {
-	if (handlers[type] == null) {
-		handlers[type] = [];
-	}
-	handlers[type].push(callback);
-};
-
-exports.removeEventListener = function(type, callback) {
-	if (handlers[type]) {
-		var index = handlers[type].indexOf(callback);
-		index != -1 && handlers[type].splice(index, 1);
-	}
-};
+	vars = {},
+	prefix = 'slider-' + args.tssclass + '-';
 
 init();
 function init() {
-	var tssclass = args.tssclass,
-		// lastValue = 0,
-		values = args.values = JSON.parse(args.values);
+	// normalize data
+	args.max = parseInt(args.max, 10);
+	args.min = parseInt(args.min, 10);
+	args.values = JSON.parse(args.values);
+	args.targets && (args.targets = JSON.parse(args.targets));
 	
-  	for(var i=0,ii=values.length; i<ii; i++){
-		var index = i + 1,
-			// value = values[i],
-			thumb = $.UI.create('View', { dataIndex: index, classes: 'slider-thumb slider-thumb-' + tssclass + '-' + index }), // , center: { x: value + '%', y: '50%' }
-			track = $.UI.create('View', { classes: 'slider-track slider-track-' + tssclass + '-' + index }); // , left: lastValue + '%', width: (value - lastValue) + '%'
-		
+	vars.range  = args.max - args.min;
+	
+	//
+	
+	$.addClass($.slider, prefix.substr(0, prefix.length - 1));
+	
+		var track = $.UI.create('View', { classes: prefix + 'track' });
+		track.addEventListener('postlayout', postlayout);
 		$.slider.add(track);
-		$.slider.add(thumb);
-		
-		thumb.addEventListener('touchstart', touchstart);
-		thumb.addEventListener('touchmove', touchmove);
-		thumb.addEventListener('touchend', touchend);
-		thumb.addEventListener('touchcancel', touchcancel);
-		
-		vars['thumb_' + index] = thumb;
-		vars['track_' + index] = track;
-		
-		// lastValue = value;
-	};
-	
-	vars.valueRange = args.max - args.min;
-}
-
-function slide() {
-	var index = ++vars.lastIndex,
-		value = args.values[index];
-		
-  	if (value != null) {
-  		var _index = index + 1,
-  			lastDest = vars.lastDest || vars.leftRange,
-	  		dest = vars.leftRange + percentToPoint(value);
-	  	
-	  	var thumb = vars['thumb_' + _index],
-	  		centerY = vars.centerY;
-	  	thumb.center = { x: lastDest, y: centerY };
-	  	thumb.opacity = 1;
-  		thumb.animate({
-  			center: { x: dest, y: centerY },
-  			duration: 1000
-  		}, slide);	
-  		
-  		var track = vars['track_' + _index];
-  		track.left = lastDest;
-  		track.opacity = 1;
-  		track.animate({
-  			width: dest - lastDest,
-  			duration: 1000
-  		});	
-  		
-  		vars.lastDest = dest;
-  		vars.lastIndex = index;
-  	}
 }
 
 function postlayout(e) {
-	$.slider.removeEventListener('postlayout', postlayout);
-
-	var left  = Math.floor( vars['thumb_1'].rect.width / 2 ),
-		width = Math.floor( $.slider.rect.width - left - Math.floor( vars['thumb_' + args.values.length].rect.width / 2 ) );
-	$.track.applyProperties({ left: left, width: width, opacity: 1 });
+  	this.removeEventListener('postlayout', postlayout);
+  	
+  	var y 			= this.rect.y,
+  		trackWidth  = this.rect.width,
+  		sliderWidth = this.parent.rect.width,
+  		partWidth   = trackWidth / vars.range,
+  		minX		= (sliderWidth - trackWidth) / 2;
+  		
+  	vars.partWidth  = partWidth;
+  	vars.trackWidth = trackWidth;
+  	vars.minX 		= minX;
+  	vars.maxX 		= minX + trackWidth;
+  	vars.y 			= y;
+  	
+  	// if (args.targets) {
+		// var targets = args.targets;
+	  	// for(var i=targets.length - 1; i >= 0; i--){
+			// $.slider.add( $.UI.create('View', { classes: prefix + 'target' + ' ' + prefix + 'target-' + i, left: targets[i] * partWidth }) );
+		// };
+	// }
 	
-	vars.leftRange  = left;
-	vars.slideRange = width;
-	vars.centerY    = $.slider.rect.height / 2;
-	
-	vars.lastIndex = -1;
-	slide();
+	var min = args.min, 
+		values = args.values;
+		
+  	for(var i=values.length - 1; i >= 0; i--){
+  		var value = values[i],
+  			width = (value - min) * partWidth;
+  		
+  		var track = $.UI.create('View', { classes: prefix + 'track' + ' ' + prefix + 'track-' + i, left: minX, width: width });
+		vars['track_' + i] = track;
+		$.slider.add(track);
+		
+		var thumb = $.UI.create('View', { thumbIndex: i, classes: prefix + 'thumb' + ' ' + prefix + 'thumb-' + i, center: { x: minX + width, y: y } });
+		vars['thumb_' + i] = thumb;
+		$.slider.add(thumb);
+	};
 }
 
 function touchstart(e) {
 	e.cancelBubble = true;
-  	vars.targetIndex = e.source.dataIndex;
+	vars.thumbIndex = e.source.thumbIndex;
   	vars.x = e.x;
-  	
-  	Ti.API.error('Quang:vars.targetIndex ' + JSON.stringify( vars.targetIndex ));
 }
 
 function touchend(e) {
 	e.cancelBubble = true;
-  	if (vars.targetIndex == null) { return; }
-  	vars.targetIndex = null;
-  	
-  	var callbacks = handlers['change'];
-  	if (callbacks) {
-  		for(var i=0,ii=callbacks.length; i<ii; i++){
-			var type = vars.targetIndex == 'thumb_1' ? 1 : 2;
-			callbacks[i]( type, getValue(type) );
-	  	};
-  	}
+  	vars.thumbIndex = null;
 }
 
 function touchcancel(e) {
 	e.cancelBubble = true;
-  	vars.targetIndex = null;
+  	vars.thumbIndex = null;
 }
 
 function touchmove(e) {
 	e.cancelBubble = true;
-	if (vars.targetIndex == null) { return; }
+	if (vars.thumbIndex == null) { return; }
 	
-  	var pos = e.source.convertPointToView({ x: e.x, y: e.y }, $.track);
-  	if (pos < 0) { pos = 0; }
-  	if (pos > vars.slideRange) { pos = vars.slideRange; }
-  	
-  	var values = args.values,
-  		index = vars.targetIndex,
-  		newPos = pos.x - vars.x;
-  		
-  	newPos = vars.leftRange + validate(values[index - 2], newPos, values[index]);
-  	
-  	vars['thumb_' + index].center = { x: newPos, y: vars.centerY };
-  	// vars['track_' + index].width = ;
-}
-
-function validate(min, value, max) {
-	var minPos = percentToPoint(min || args.min),
-		maxPos = percentToPoint(max || args.max);
-	
-	Ti.API.error('Quang:min ' + minPos + ' pos ' + value + ' max ' + maxPos);
-	
-  	if (value < minPos) {
-  		return minPos;
-  	} else if (value > maxPos) {
-		return maxPos;
-	} else {
-		return value;
-	}
-}
-
-function percentToPoint(percent) {
-	var point = Math.floor( percent * vars.slideRange / vars.valueRange );
-	if (point < 0) {
-		point = 0;
-	} else if (point > vars.slideRange) {
-		point = vars.slideRange;
-	}
-  	return point;
-}
-
-function pointToPercent(point) {
-	var percent = Math.floor( point * vars.valueRange / vars.slideRange );
-	if (percent < args.min) {
-		percent = args.min;
-	} else if (percent > args.max) {
-		percent = args.max;
-	}
-  	return percent;
-}
-
-/*
-exports.setProperties = function(args) {
-	vars = args;
-	checkCondition();
-};
-
-function checkCondition() {
-  	if (vars.isReady) {
-		updateUI();
-	} else {
-		setTimeout(checkCondition, 500);
-	}
-}
-
-function updateUI() {
-  	
-}
-
-function getValue(type) {
-	var value;
-	
-  	if (type == 1) {
-  		value = Math.floor( $.thumb_1.left * vars.valueRange / vars.slideRange ) + args.min;
-  		if (value < args.min) {
-			value = args.min;
-		}
-  	} else {
-  		value = Math.floor( $.thumb_2.left * vars.valueRange / vars.slideRange ) + args.min;
-  		if (value > args.max) {
-			value = args.max;
-		}
+  	var pos = e.source.convertPointToView({ x: e.x, y: e.y }, $.slider);
+  	if (pos.x < vars.minX) {
+  		pos.x = vars.minX;
+  	}
+  	if (pos.x > vars.maxX) {
+  		pos.x = vars.maxX;
   	}
   	
-  	args.values[type] = value;
+  	var index = vars.thumbIndex,
+  		width = pos.x - vars.minX;
+  	vars['track_' + index].width  = width;
+  	vars['thumb_' + index].center = { x: pos.x, y: vars.y };
   	
-	return value;
+  	var value = (width / vars.partWidth) + args.min;
+  	args.values[index] = value; 
+  	
+  	$.trigger('change', { index: index, value: value });
 }
 
-*/
+exports.getValue = function(roundUp) {
+	return args.values;
+};
+
+exports.setValue = function(values) {
+	args.values = values;
+	
+	var y = vars.y,
+		min = args.min,
+		minX = vars.minX,
+		partWidth = vars.partWidth;
+	
+	for(var i=0,j=values.length; i<j; i++){
+	  	var value = values[i],
+  			width = (value - min) * partWidth;
+  		
+		vars['track_' + i].width  = width;
+		vars['thumb_' + i].center = { x: minX + width, y: y };
+	};
+};

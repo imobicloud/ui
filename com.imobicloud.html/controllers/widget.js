@@ -10,7 +10,7 @@ init(arguments[0]);
 /*
  params = {
  	csss: 'templates/stories,templates/comment',
- 	scripts: 'libs/Event.min,templates/stories,templates/comment',
+ 	scripts: 'libs/Event.min,templates/stories,templates/comment,riot/tag templates/todo.tag',
  	
  	url: '/webview/html/index.html'
  }
@@ -22,15 +22,28 @@ function init(params) {
   		css = [],
   		script = [];
 	
-	csss.unshift( 'index' );
-	scripts.unshift( 'libs/jquery-2.1.1.min', 'libs/fastclick', 'index' );
+	csss.unshift( 'index.css' );
+	scripts.unshift( 'libs/jquery-2.1.1.min.jsss', 'libs/fastclick.jsss', 'index.jsss' );
 	
 	for(var i=0,ii=csss.length; i<ii; i++){
-		css.push(' <link rel="stylesheet" href="webview/html/css/' + csss[i] + '.css"> ');
+		css.push(' <link rel="stylesheet" href="webview/html/css/' + csss[i] + '"> ');
 	}
 	
 	for(var i=0,ii=scripts.length; i<ii; i++){
-		script.push(' <script src="webview/html/js/' + scripts[i] + '.jsss"></script> ');
+		var js = scripts[i];
+		if (js.indexOf(' ') == -1) {
+			script.push(' <script src="webview/html/js/' + js + '"></script> ');
+		} else {
+			// ex: type url inline
+			// riot/tag templates/todo.tag
+			// riot/tag templates/todo.tag true
+			var parts = js.split(' ');
+			if (!parts[2]) {
+				script.push(' <script type="' + parts[0] + '" src="webview/html/js/' + parts[1] + '"></script> ');
+			} else {
+				script.push(' <script type="' + parts[0] + '">' + Ti.Filesystem.getFile( Ti.Filesystem.resourcesDirectory, 'webview/html/js/' + parts[1] ).read().toString() + '</script> ');
+			}
+		}
 	}
 	
 	$.container.html = html

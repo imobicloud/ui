@@ -15,6 +15,10 @@ $(function(){
 			'position': 'relative'
 		});
 	}	
+	
+	// prevent default long press (long press on links will show open dialog)
+	// http://atmarkplant.com/ios-wkwebview-tips/#longpress
+	document.body.style.webkitTouchCallout='none';
 });
 
 var UTILS = {
