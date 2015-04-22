@@ -20,7 +20,8 @@ exports.hide = hideDialog;
 /*
  args = {
  	persistent: 'false',
- 	visible: 'false'
+ 	visible: 'false',
+ 	zIndex: 1
  }
  * */
 function loadContent(args) {
@@ -38,8 +39,13 @@ function loadContent(args) {
 		delete args.children;
 	}
 	
+	var dialog = $.getView();
+	
+	if (args.zIndex) {
+		dialog.zIndex = args.zIndex;
+	}
+	
 	if (args.visible == 'true') {
-		var dialog = $.getView();
 		dialog.opacity = 1;
 		dialog.visible = true;
 	}

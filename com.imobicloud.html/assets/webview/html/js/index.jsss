@@ -80,6 +80,17 @@ var UTILS = {
 	    return html;
 	},
 	
+	validateURL: function(url) {
+		var urlRegex    = new RegExp('^(http|https)://', 'i');
+		var phoneRegex  = /(\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-.]([0-9]{4}))/gi;
+		if ( !phoneRegex.test( url ) ) {
+			if ( !urlRegex.test( url ) ) {
+				url = 'http://' + url;
+			}
+		}
+		return url;
+	},
+	
 	truncate: function(text, limit) {
 	  	if (text.length <= limit) {
 			return text;
@@ -109,6 +120,7 @@ UTILS.onClick = function(e) {
 	if (element.nodeName == 'A') {
 		var data = $(element).data();
   		data.clickAction = element.hash;
+		data.link = UTILS.validateURL(data.link);
   		UTILS.fireEvent(e, 'click', data);
   		return false;
 	} else {
