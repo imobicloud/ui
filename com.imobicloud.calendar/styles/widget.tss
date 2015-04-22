@@ -1,25 +1,19 @@
 /*
-".calendar-container": { width: 320, height: Ti.UI.SIZE, top: 0 }
-	".calendar-wrapper": { height: Ti.UI.SIZE, top: 0 }
-		".calendar-month": { height: Ti.UI.SIZE, top: 0, layout: 'vertical' }
-			".calendar-month-title": { width: '100%', height: 53, backgroundColor: '#fff', color: '#000', font: { fontSize: 18, fontFamily: 'HelveticaNeue-Light' }, textAlign: 'center' }
-			".calendar-month-wrapper": { height: Ti.UI.SIZE, layout: 'vertical', backgroundColor: '#d6d6d6' }	
-				".calendar-week-container": { height: 32, top: 0.5, layout: 'horizontal', backgroundColor: '#fff' }
-					".calendar-week": { width: 45, height: 32, left: 0.5, backgroundColor: '#00b2ff' }
-						".calendar-week-label": { color: '#fff', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' } }
-				".calendar-date-container": { height: Ti.UI.SIZE, bottom: 0.5, layout: 'horizontal' }
-					".calendar-date": { width: 45, height: 33, top: 0.5, left: 0.5, backgroundColor: '#fff' }
-						".calendar-date-label": { color: '#5e5e5e', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' }, touchEnabled: false }
-					".calendar-date-today": { backgroundColor: '#f1f1f1' }
-						".calendar-date-today-label": { color: '#000' }
-					".calendar-date-disabled": { backgroundColor: '#fff', touchEnabled: false }
-						".calendar-date-disabled-label": { color: '#dbdbdb' }
-				".calendar-column-0": { width: 46, left: 0 }
-				".calendar-column-6": { width: 46 }
-	".calendar-button": { width: 50, height: 53, top: 0, zIndex: 1 }
-	".calendar-button-prev": { left: 0 }
-	".calendar-button-next": { right: 0 }
-		".calendar-button-icon": { width: 15, height: 26 }
-		".calendar-button-icon-prev": { image: '/images/group/button-prev.png' }
-		".calendar-button-icon-next": { image: '/images/group/button-next.png' }
+".imc-calendar": { width: 320, height: Ti.UI.SIZE }
+	".imc-calendar-month": { height: Ti.UI.SIZE, top: 0, layout: 'vertical' }
+		".imc-calendar-week-container": { height: 32, top: 0.5, layout: 'horizontal' }
+			".imc-calendar-week": { width: 45, height: 32, left: 0.5 }
+				".imc-calendar-week-label": { color: '#fff', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' } }
+		".imc-calendar-date-container": { height: Ti.UI.SIZE, bottom: 0.5, layout: 'horizontal' }
+			".imc-calendar-date": { width: 45, height: 33, top: 0.5, left: 0.5 }
+				".imc-calendar-date-label": { color: '#fff', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' }, touchEnabled: false }
+			".imc-calendar-today": {  }
+				".imc-calendar-today-label": { color: '#2b414d' }
+			".imc-calendar-disabled": { visible: false, touchEnabled: false }
+				".imc-calendar-disabled-label": { visible: false, touchEnabled: false }
+		
+		".imc-calendar-column-0": { width: 46, left: 0 }
+			".imc-calendar-column-label-0": {  }
+		".imc-calendar-column-6": { width: 46 }
+			".imc-calendar-column-label-6": {  }
 */

@@ -1,15 +1,3 @@
 <Alloy>
-	<View class="calendar-container" onSwipe="calendarSwipe">
-	    
-        <View id="calendarContainer" class="calendar-wrapper" onClick="calendarClicked"/>
-        
-        <View class="calendar-button calendar-button-prev" onClick="loadPreviousMonth">
-            <ImageView class="calendar-button-icon calendar-button-icon-prev"/>
-        </View>
-        
-        <View class="calendar-button calendar-button-next" onClick="loadNextMonth">
-            <ImageView class="calendar-button-icon calendar-button-icon-next"/>
-        </View>
-	    
-	</View>
+	<View id="vCalendar" class="imc-calendar" onClick="calendarClicked" onSwipe="calendarSwipe"/>
 </Alloy>

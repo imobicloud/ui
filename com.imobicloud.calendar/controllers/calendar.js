@@ -1,60 +1,103 @@
-var moment = require('alloy/moment');
 
 init(arguments[0]);
 
+/*
+ args = {
+ 	date: moment object,
+ 	dateFormatter: null // or function(){}
+ }
+ * */
 function init(args) {
-	var time = moment((args.month + 1) + '-01-' + args.year + ' 00:00:00', 'MM-DD-YYYY hh:mm:ss');
-	
-	$.lblMonth.text = time.format('MMMM YYYY');
-	
 	loadWeek();
-	
-	loadDate(time, args.month);
+	loadDate(args.date, args.dateFormatter || dateFormatter);
 };
 
 function loadWeek() {
+	// moment.weekdays(); 
+	// moment.localeData().firstDayOfWeek();
   	// var weekNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   	var weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   	
+  	var container = $.UI.create('View', { classes: 'imc-calendar-week-container' });
+  	
   	for (var i = 0; i < 7; i++) {
-  		var vDate = $.UI.create('View', { classes: 'calendar-week calendar-column-' + i });
-  			vDate.add( $.UI.create('Label', { text: weekNames[i], classes: 'calendar-week-label calendar-column-' + i + '-label' }) );
-		$.weekContainer.add(vDate);
+  		var vDate = $.UI.create('View', { classes: 'imc-calendar-week imc-calendar-column-' + i });
+  			vDate.add( $.UI.create('Label', { text: weekNames[i], classes: 'imc-calendar-week-label imc-calendar-column-label-' + i }) );
+		container.add(vDate);
 	};
+	
+	$.calendar.add(container);
 }
 
-function loadDate(time, currentMonth) {
-	var column = 0,
-		dayIndex = time.day(), // Sunday as 0 and Saturday as 6
-  		// prevMonth = time.subtract('days', ( dayIndex ? dayIndex : 7 ) - 1),
-  		prevMonth = time.subtract('days', dayIndex),
-  		today = moment().startOf('hour').hour(0).toDate().getTime() + '';// get today's time stamp without hours, minutes and seconds
+function loadDate(time, formatter) {
+	// TODO: require moment 2.8.4, current 2.7.0 [https://github.com/appcelerator/alloy/blob/master/Alloy/builtins/moment.js]
+	
+	var moment 	  = require(WPATH('moment')), // require('alloy/moment'),
+		column    = 0,
+		thisMonth = time.month(),
+  		// currentDate = time.subtract(( time.day() || 7 ) - 1, 'days'),
+  		currentDate = time.subtract(time.day(), 'days'),
+  		todayId     = moment().startOf('day').format('x');// get today's time stamp without hours, minutes and seconds
+  	
+  	var container = $.UI.create('View', { classes: 'imc-calendar-date-container' });
   	
   	for (var i = 0; i < 42; i++) {
-  		var date = prevMonth.toDate().getTime() + '',
-  			viewClasses  = 'calendar-date ',
-  			labelClasses = 'calendar-date-label ';
+  		var dateId = currentDate.format('x'),
+  			isThisMonth = true,
+  			isToday = false;
   		
-  		// highlight previous and next month
-  		if (prevMonth.month() != currentMonth) {
-  			viewClasses  += 'calendar-date-disabled';
-  			labelClasses += 'calendar-date-disabled-label';
-  		}  
-  		// highlight current date
-  		else if (date == today) {
-  			viewClasses  += 'calendar-date-today';
-  			labelClasses += 'calendar-date-today-label';
+  		if (currentDate.month() == thisMonth) {
+  			if (dateId == todayId) {
+  				isToday = true;
+  			}
+  		} else  {
+  			isThisMonth = false;
   		}
   		
-		viewClasses  += ' calendar-column-' + column;
-		labelClasses += ' calendar-column-' + column + '-label';
+		container.add(formatter({
+			column: column,
+			dateId: dateId,
+			dateText: currentDate.date(),
+			isThisMonth: isThisMonth,
+ 			isToday: isToday
+		}));
+		
+		currentDate.add(1, 'days');
 		
 		if (column < 6) { column++; } else { column = 0; }
-  		
-  		var vDate = $.UI.create('View', { date: date, classes: viewClasses });
-  			vDate.add( $.UI.create('Label', { text: prevMonth.date(), classes: labelClasses }) );
-		$.dateContainer.add(vDate);
-		
-		prevMonth.add('days', 1);
 	};
+	
+	$.calendar.add(container);
+}
+
+/*
+ params = {
+ 	column: 0,
+ 	dateId: 1360013296123,
+ 	dateText: 31,
+ 	isThisMonth: true,
+ 	isToday: false
+ } 
+ * */
+function dateFormatter(params) {
+  	var viewClasses  = 'imc-calendar-date ',
+		labelClasses = 'imc-calendar-date-label ';
+	
+	if (params.isThisMonth) {
+		if (params.isToday) {
+			viewClasses  += 'imc-calendar-today';
+  			labelClasses += 'imc-calendar-today-label';
+		}
+	} else {
+		viewClasses  += 'imc-calendar-disabled';
+		labelClasses += 'imc-calendar-disabled-label';
+	}
+	
+	viewClasses  += ' imc-calendar-column-' + params.column;
+	labelClasses += ' imc-calendar-column-label-' + params.column;
+	
+	var vDate = $.UI.create('View', { date: params.dateId, classes: viewClasses });
+		vDate.add( $.UI.create('Label', { text: params.dateText, classes: labelClasses }) );
+		
+	return vDate;
 }

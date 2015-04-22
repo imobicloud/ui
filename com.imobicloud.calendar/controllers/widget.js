@@ -1,69 +1,65 @@
-var moment = require('alloy/moment'),
-	events = {},
-	vars = {};
+// TODO: require moment 2.8.4, current 2.7.0 [https://github.com/appcelerator/alloy/blob/master/Alloy/builtins/moment.js]
+var moment = require(WPATH('moment')), // require('alloy/moment'),
+	dateFormatter,
+	oDate;
 
-exports.init = function(date) {
-	var oMoment = date || moment();
-	
-	vars.month = oMoment.month(); // 0 -> 11
-	vars.year = oMoment.year();
-	
-	loadCalendar();
+/*
+ params = {
+ 	date: null, 		// or date object
+ 	dateFormatter: null // or function(){}
+ }
+ * */
+exports.init = function(params) {
+	if (params == null) { params = {}; }
+	dateFormatter = params.dateFormatter;
+	set(params.date);
 };
 
 exports.unload = function() {
-	vars.controller && $.calendarContainer.remove( vars.controller.getView() );
-	vars = null;
+	dateFormatter = null;
+	return $.vCalendar.removeAllChildren();
 };
 
+exports.get = function() {
+	return oDate;
+};
+
+function set(date) {
+	oDate = moment(date).startOf('month');
+	return loadCalendar();
+}
+exports.set = set;
+
+function previous() {
+	oDate.subtract(1, 'months');
+  	return loadCalendar();
+}
+exports.previous = previous;
+
+function next() {
+	oDate.add(1, 'months');
+  	return loadCalendar();
+}
+exports.next = next;
+
 function loadCalendar() {
-	var calendarContainer = $.calendarContainer;
+	var container = $.vCalendar;
 	
-	// hide lblMonth
-	// var lblMonth = calendarContainer.children[0].children[0];
-	// lblMonth && (lblMonth.visible = false);
+	container.add( Widget.createController('calendar', { 
+		date: moment(oDate), // create a copy of oDate to prevent its value changed
+		dateFormatter: dateFormatter 
+	}).getView() );
 	
-	var data = { month: vars.month, year: vars.year },
-		controller = Widget.createController('calendar', data);
-	calendarContainer.add( controller.getView() );
-	
-	vars.controller && calendarContainer.remove( vars.controller.getView() );
-	
-	vars.controller = controller;
-	
-	fireEvent('monthChange', data);
-}
-
-exports.loadCalendar = loadCalendar;
-
-function loadPreviousMonth(e) {
-	if (vars.month != 0) {
-		vars.month--;
-	} else {
-		vars.month = 11;
-		vars.year--;
+	if (container.children.length > 1) {
+		container.remove( container.children[0] );
 	}
 	
-  	loadCalendar();
-}
-
-function loadNextMonth(e) {
-	if (vars.month != 11) {
-		vars.month++;
-	} else {
-		vars.month = 0;
-		vars.year++;
-	}
-	
-  	loadCalendar();
+	return $.trigger('change', { type: 'month', date: moment(oDate) });	// create a copy of oDate to prevent its value changed
 }
 
 function calendarClicked(e) {
-	var el = e.source;
-  	el.date && fireEvent('selectedChange', {
-  		date: el.date,
-  		view: el
-  	});
+	var view = e.source;
+	view.date && $.trigger('change', { type: 'selected', date: moment(view.date), view: view });
 }
 
 /*
@@ -75,43 +71,33 @@ function selectedChange(e) {
 		view = e.view;
 	
 	if (selectedDates.indexOf(date) === -1) {
-		$.addClass(view, 'calendar-date-selected');
-		$.addClass(view.children[0], 'calendar-date-selected-label');
+		$.addClass(view, 'imc-calendar-date-selected');
+		$.addClass(view.children[0], 'imc-calendar-date-selected-label');
 		
 		selectedDates.push(date);
 	} else {
-		$.removeClass(view, 'calendar-date-selected');
-		$.removeClass(view.children[0], 'calendar-date-selected-label');
+		$.removeClass(view, 'imc-calendar-date-selected');
+		$.removeClass(view.children[0], 'imc-calendar-date-selected-label');
 		
 		selectedDates = _.without(selectedDates, date);
 	}
 }
- 
  * */
 
 function calendarSwipe(e) {
-  	switch (e.direction) {
-  		case 'left':
-  			loadNextMonth();
-  			break;
-  		case 'right':
-  			loadPreviousMonth();
-  			break;
-  	}
+	var actions = { left: next, right: previous },
+		action  = actions[e.direction];
+	action && action();	
 }
 
 //
 
-exports.getCurrent = function() {
-	return { month: vars.month, year: vars.year };
-};
-
-exports.getDateView = function() {
-	return vars.controller ? vars.controller.dateContainer : null;
+exports.getView = function() {
+	return vCalendar.children[0];
 };
 
 /*
-// demo how to use getDateView
+// demo how to use getView
 
 function loadEvents() {
 	var today = new Date(),
@@ -119,32 +105,13 @@ function loadEvents() {
 		month = today.getMonth(),
 		year  = today.getFullYear();
 	
-  	var children = $.vCalendar.getDateView().children;
+  	var children = $.vCalendar.getView().children;
   	for(var i=0,ii=children.length; i<ii; i++){
   		var current = new Date( parseInt(children[i].date, 10) );
   		if (current.getFullYear() == year && current.getMonth() == month && current.getDate() == date) {
-  			children[i].add( $.UI.create('ImageView', { classes: 'calendar-date-event' }) );
+  			children[i].add( $.UI.create('ImageView', { classes: 'imc-calendar-date-event' }) );
   		}
 	};
 }
  * */
 
-// EVENTS
-
-function fireEvent(type, data) {
-  	var callbacks = events[type];
-  	if (callbacks) {
-  		for(var i=0,ii=callbacks.length; i<ii; i++){
-			callbacks[i](data, { type: type });
-		};
-  	}
-}
-
-exports.on = function(type, callback) {
-	if (events[type]) {
-  		events[type].push(callback);
-  	} else {
-  		events[type] = [callback];
-  	}
-  	return this;
-};
