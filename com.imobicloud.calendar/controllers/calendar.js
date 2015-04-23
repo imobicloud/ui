@@ -41,12 +41,12 @@ function loadDate(time, formatter) {
 	var column      = 0,
 		thisMonth   = time.month(),
   		currentDate = time.subtract(firstDayOfWeek === 0 ? time.day() : ( time.day() || 7 ) - 1, 'days'),
-  		todayId     = moment().startOf('day').format('x');// get today's time stamp without hours, minutes and seconds
+  		todayId     = moment().startOf('day').format();// get today's iso string without hours, minutes and seconds
   	
   	var container = $.UI.create('View', { classes: 'imc-calendar-dates' });
   	
   	for (var i = 0; i < 42; i++) {
-  		var dateId = currentDate.format('x'),
+  		var dateId = currentDate.format(),
   			isThisMonth = true,
   			isToday = false;
   		
@@ -79,7 +79,7 @@ function loadDate(time, formatter) {
  params = {
  	index: 0,  // from 0 to 41, 41 dates of a month view, row = Math.floor(params.index / 7)
  	column: 0,
- 	dateId: 1360013296123,
+ 	dateId: "2015-04-23T00:00:00+07:00", // iso string with timezone
  	dateText: 31,
  	isThisMonth: true,
  	isToday: false
