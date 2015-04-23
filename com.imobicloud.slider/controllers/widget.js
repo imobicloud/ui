@@ -157,8 +157,12 @@ exports.setValue = function(values) {
 	  	if (value < min) { value = min; }
 	  	else if (value > max) { value = max; }
 	  	
-  		var width = (value - min) * partWidth;
+  		var width = (value - min) * partWidth,
+  			center = { x: minX + width, y: y };
+  			
 		vars['track_' + i].width  = width;
-		vars['thumb_' + i].center = { x: minX + width, y: y };
+		vars['thumb_' + i].center = center;
+
+		$.trigger('change', { index: i, value: value, pos: center });
 	};
 };
