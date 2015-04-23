@@ -1,3 +1,6 @@
+// TODO: require moment 2.8.4, current 2.7.0 [https://github.com/appcelerator/alloy/blob/master/Alloy/builtins/moment.js]
+var moment = require('moment'), // require('alloy/moment'),
+	firstDayOfWeek; // 0: Sunday is the first day of the week. 1: Monday is the first day of the week.
 
 init(arguments[0]);
 
@@ -8,38 +11,39 @@ init(arguments[0]);
  }
  * */
 function init(args) {
+	firstDayOfWeek = moment.localeData().firstDayOfWeek();
+	
 	loadWeek();
 	loadDate(args.date, args.dateFormatter || dateFormatter);
 };
 
 function loadWeek() {
-	// moment.weekdays(); 
-	// moment.localeData().firstDayOfWeek();
-  	// var weekNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  	var weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  	var i = firstDayOfWeek,
+  		weekNames = moment.weekdaysShort(),
+  		container = $.UI.create('View', { classes: 'imc-calendar-weeks' });
   	
-  	var container = $.UI.create('View', { classes: 'imc-calendar-week-container' });
-  	
-  	for (var i = 0; i < 7; i++) {
-  		var vDate = $.UI.create('View', { classes: 'imc-calendar-week imc-calendar-column-' + i });
-  			vDate.add( $.UI.create('Label', { text: weekNames[i], classes: 'imc-calendar-week-label imc-calendar-column-label-' + i }) );
+  	while (i < 7 || firstDayOfWeek === 1) {
+  		var vDate = $.UI.create('View', { classes: 'imc-calendar-week imc-calendar-week-' + i });
+  			vDate.add( $.UI.create('Label', { text: weekNames[ i < 7 ? i : 0 ], classes: 'imc-calendar-week-label imc-calendar-week-label-' + i }) );
 		container.add(vDate);
+		
+		if (i === 7) {
+			break;
+		}
+		
+		i++;
 	};
 	
 	$.calendar.add(container);
 }
 
 function loadDate(time, formatter) {
-	// TODO: require moment 2.8.4, current 2.7.0 [https://github.com/appcelerator/alloy/blob/master/Alloy/builtins/moment.js]
-	
-	var moment 	  = require(WPATH('moment')), // require('alloy/moment'),
-		column    = 0,
-		thisMonth = time.month(),
-  		// currentDate = time.subtract(( time.day() || 7 ) - 1, 'days'),
-  		currentDate = time.subtract(time.day(), 'days'),
+	var column      = 0,
+		thisMonth   = time.month(),
+  		currentDate = time.subtract(firstDayOfWeek === 0 ? time.day() : ( time.day() || 7 ) - 1, 'days'),
   		todayId     = moment().startOf('day').format('x');// get today's time stamp without hours, minutes and seconds
   	
-  	var container = $.UI.create('View', { classes: 'imc-calendar-date-container' });
+  	var container = $.UI.create('View', { classes: 'imc-calendar-dates' });
   	
   	for (var i = 0; i < 42; i++) {
   		var dateId = currentDate.format('x'),
@@ -80,24 +84,24 @@ function loadDate(time, formatter) {
  } 
  * */
 function dateFormatter(params) {
-  	var viewClasses  = 'imc-calendar-date ',
-		labelClasses = 'imc-calendar-date-label ';
+  	var  viewClasses = ['imc-calendar-date'],
+		labelClasses = ['imc-calendar-date-label'];
 	
 	if (params.isThisMonth) {
 		if (params.isToday) {
-			viewClasses  += 'imc-calendar-today';
-  			labelClasses += 'imc-calendar-today-label';
+			 viewClasses.push('imc-calendar-today');
+  			labelClasses.push('imc-calendar-today-label');
 		}
 	} else {
-		viewClasses  += 'imc-calendar-disabled';
-		labelClasses += 'imc-calendar-disabled-label';
+		 viewClasses.push('imc-calendar-disabled');
+		labelClasses.push('imc-calendar-disabled-label');
 	}
 	
-	viewClasses  += ' imc-calendar-column-' + params.column;
-	labelClasses += ' imc-calendar-column-label-' + params.column;
+	 viewClasses.push('imc-calendar-date-' + params.column);
+	labelClasses.push('imc-calendar-date-label-' + params.column);
 	
-	var vDate = $.UI.create('View', { date: params.dateId, classes: viewClasses });
-		vDate.add( $.UI.create('Label', { text: params.dateText, classes: labelClasses }) );
+	var vDate = $.UI.create('View',     { date: params.dateId,   classes:  viewClasses.join(' ') });
+		vDate.add( $.UI.create('Label', { text: params.dateText, classes: labelClasses.join(' ') }) );
 		
 	return vDate;
 }

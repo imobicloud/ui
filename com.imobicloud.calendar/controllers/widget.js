@@ -1,5 +1,5 @@
 // TODO: require moment 2.8.4, current 2.7.0 [https://github.com/appcelerator/alloy/blob/master/Alloy/builtins/moment.js]
-var moment = require(WPATH('moment')), // require('alloy/moment'),
+var moment = require('moment'), // require('alloy/moment'),
 	dateFormatter,
 	oDate;
 
@@ -17,6 +17,7 @@ exports.init = function(params) {
 
 exports.unload = function() {
 	dateFormatter = null;
+	oDate = null;
 	return $.vCalendar.removeAllChildren();
 };
 
