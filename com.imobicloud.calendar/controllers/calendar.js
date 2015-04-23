@@ -59,6 +59,7 @@ function loadDate(time, formatter) {
   		}
   		
 		container.add(formatter({
+			index: i,
 			column: column,
 			dateId: dateId,
 			dateText: currentDate.date(),
@@ -76,6 +77,7 @@ function loadDate(time, formatter) {
 
 /*
  params = {
+ 	index: 0,  // from 0 to 41, 41 dates of a month view, row = Math.floor(params.index / 7)
  	column: 0,
  	dateId: 1360013296123,
  	dateText: 31,
