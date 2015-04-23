@@ -6,7 +6,7 @@
 
 View
 	
-	<Widget id="vCalendar" src="com.imobicloud.calendar" onChange="calendarChange"></Widget>
+	<Widget id="vCalendar" src="com.imobicloud.calendar" swipeable="true" onChange="calendarChange"></Widget>
     
 Styles - app.tss
 

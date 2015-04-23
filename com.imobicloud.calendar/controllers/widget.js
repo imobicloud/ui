@@ -3,6 +3,19 @@ var moment = require('moment'), // require('alloy/moment'),
 	dateFormatter,
 	oDate;
 
+init(arguments[0] || {});
+
+/*
+ args = {
+ 	swipeable: 'false'
+ }
+ * */
+function init(args) {
+  	if (args.swipeable == 'true') {
+  		$.vCalendar.addEventListener('swipe', calendarSwipe);
+  	} 
+}
+
 /*
  params = {
  	date: null, 		// or date object
