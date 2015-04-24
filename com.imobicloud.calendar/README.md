@@ -82,9 +82,14 @@ Controller
 
 	$.vCalendar.getView(); // => return view of current month
 
-	// For custom date UI, use dateFormatter
+	// For custom week/date UI, use weekFormatter/dateFormatter
 	// view com.imobicloud.calendar/controllers/calendar.js for example
 	$.vCalendar.init({
+		weekFormatter: function(params) {
+		  	var vDate = $.UI.create('View', { classes: 'imc-calendar-week imc-calendar-week-' + params.column });
+				vDate.add( $.UI.create('Label', { text: params.weekText, classes: 'imc-calendar-week-label imc-calendar-week-label-' + params.column }) );
+			return vDate;
+		},
 		dateFormatter: function(params){
 			var vDate = $.UI.create('View', { date: params.dateId });
 				vDate.add( $.UI.create('Label', { text: params.dateText }) );

@@ -1,6 +1,7 @@
 // TODO: require moment 2.8.4, current 2.7.0 [https://github.com/appcelerator/alloy/blob/master/Alloy/builtins/moment.js]
 var moment = require('moment'), // require('alloy/moment'),
-	dateFormatter,
+	dateFormatter, 
+	weekFormatter,
 	oDate;
 
 init(arguments[0] || {});
@@ -19,17 +20,20 @@ function init(args) {
 /*
  params = {
  	date: null, 		// or date object
- 	dateFormatter: null // or function(){}
+ 	dateFormatter: null, // or function(){}
+ 	weekFormatter: null // or function(){}
  }
  * */
 exports.init = function(params) {
 	if (params == null) { params = {}; }
 	dateFormatter = params.dateFormatter;
+	weekFormatter = params.weekFormatter;
 	set(params.date);
 };
 
 exports.unload = function() {
 	dateFormatter = null;
+	weekFormatter = null;
 	oDate = null;
 	return $.vCalendar.removeAllChildren();
 };
@@ -61,7 +65,8 @@ function loadCalendar() {
 	
 	container.add( Widget.createController('calendar', { 
 		date: moment(oDate), // create a copy of oDate to prevent its value changed
-		dateFormatter: dateFormatter 
+		dateFormatter: dateFormatter,
+		weekFormatter: weekFormatter
 	}).getView() );
 	
 	if (container.children.length > 1) {

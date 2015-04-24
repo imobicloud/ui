@@ -13,25 +13,21 @@ init(arguments[0]);
 function init(args) {
 	firstDayOfWeek = moment.localeData().firstDayOfWeek();
 	
-	loadWeek();
+	loadWeek(args.weekFormatter || weekFormatter);
 	loadDate(args.date, args.dateFormatter || dateFormatter);
 };
 
-function loadWeek() {
-  	var i = firstDayOfWeek,
+function loadWeek(formatter) {
+  	var dow = firstDayOfWeek,
   		weekNames = moment.weekdaysShort(),
   		container = $.UI.create('View', { classes: 'imc-calendar-weeks' });
   	
-  	while (i < 7 || firstDayOfWeek === 1) {
-  		var vDate = $.UI.create('View', { classes: 'imc-calendar-week imc-calendar-week-' + i });
-  			vDate.add( $.UI.create('Label', { text: weekNames[ i < 7 ? i : 0 ], classes: 'imc-calendar-week-label imc-calendar-week-label-' + i }) );
-		container.add(vDate);
-		
-		if (i === 7) {
-			break;
-		}
-		
-		i++;
+  	for (var i = 0; i < 7; i++) {
+		container.add(formatter({
+  			column: i,
+  			weekText: weekNames[ dow < 7 ? dow : 0 ]
+  		}));
+  		dow++;
 	};
 	
 	$.calendar.add(container);
@@ -73,6 +69,18 @@ function loadDate(time, formatter) {
 	};
 	
 	$.calendar.add(container);
+}
+
+/*
+ params = {
+ 	column: 0,
+ 	weekText: 31
+ } 
+ * */
+function weekFormatter(params) {
+  	var vDate = $.UI.create('View', { classes: 'imc-calendar-week imc-calendar-week-' + params.column });
+		vDate.add( $.UI.create('Label', { text: params.weekText, classes: 'imc-calendar-week-label imc-calendar-week-label-' + params.column }) );
+	return vDate;
 }
 
 /*
