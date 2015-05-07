@@ -31,6 +31,17 @@ function init() {
 		var track = $.UI.create('View', { classes: prefix + 'track' });
 		track.addEventListener('postlayout', postlayout);
 		$.slider.add(track);
+		
+		var values = args.values;
+	  	for(var i=values.length - 1; i >= 0; i--){
+	  		var track = $.UI.create('View', { classes: prefix + 'track' + ' ' + prefix + 'track-' + i, left: 0, width: 0 });
+			vars['track_' + i] = track;
+			$.slider.add(track);
+			
+			var thumb = $.UI.create('View', { thumbIndex: i, classes: prefix + 'thumb' + ' ' + prefix + 'thumb-' + i, center: { x: 0, y: 0 } });
+			vars['thumb_' + i] = thumb;
+			$.slider.add(thumb);
+		};	
 }
 
 function postlayout(e) {
@@ -70,14 +81,13 @@ function postlayout(e) {
   		var value = values[i],
   			width = (value - min) * partWidth;
   		
-  		var track = $.UI.create('View', { classes: prefix + 'track' + ' ' + prefix + 'track-' + i, left: minX, width: width });
-		vars['track_' + i] = track;
-		$.slider.add(track);
-		
+  		var track = vars['track_' + i];
+  		track.left = minX;
+  		track.width = width;
+  		
 		var center = { x: minX + width, y: y };
-		var thumb = $.UI.create('View', { thumbIndex: i, classes: prefix + 'thumb' + ' ' + prefix + 'thumb-' + i, center: center });
-		vars['thumb_' + i] = thumb;
-		$.slider.add(thumb);
+		var thumb = vars['thumb_' + i];
+		thumb.center = center;
 		
 		pos.unshift( center );	
 	};
