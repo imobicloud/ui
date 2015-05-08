@@ -9,14 +9,15 @@ exports.setText = init;
 
 /*
 args = {
-	classes: 	'',
+	// ... tss styles
  	text: 		'',
  	textColor: 	'#ffffff',
  	search: 	[{ 'text': '', 'color': '#ffffff', 'font': { 'fontSize': 18, 'fontFamily': 'HelveticaNeue-Medium' } }]
 }
  * */
 function formatText(args) {
-  	args.classes && $.label.applyProperties( $.createStyle({ classes: args.classes }) );
+	var exclude = ['id', 'text', 'textColor', 'search'];
+	$.label.applyProperties( _.omit(args, exclude) );
 	
 	var text = args.text,
 		search;
