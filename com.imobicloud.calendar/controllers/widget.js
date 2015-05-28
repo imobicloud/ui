@@ -4,6 +4,7 @@ var moment = require('moment'), // require('alloy/moment'),
 	weekFormatter,
 	oDate;
 
+// You can call this widget with parameters or not
 init(arguments[0] || {});
 
 /*
@@ -17,6 +18,8 @@ function init(args) {
   	} 
 }
 
+// -------------------------------------------------------------------------
+// ---------------------------- Public functions ---------------------------
 /*
  params = {
  	date: null, 		// or date object
@@ -60,6 +63,32 @@ function next() {
 }
 exports.next = next;
 
+// The calendar has 2 children structures: [week, dates]. This function exports both in an array
+exports.getView = function() {
+	return $.vCalendar.children[0];
+};
+/*
+// DEMO: how to use getView to add more info to current day
+// You must define the new class applied in you app.tss
+function loadEvents() {
+    var moment = require('moment');
+    var today = moment().format('YYYY-MM-DD');
+	
+	// The calendar has 2 children structures: [week, dates]. We only need dates
+  	var children = $.vCalendar.getView().children[1].children;
+  	for (var i=0; i<children.length; i++) {
+        if (today == moment(children[i].date).format('YYYY-MM-DD')) {
+  			children[i].add( $.UI.create('ImageView', { classes: 'imc-calendar-date-event' }) );
+  		}
+	};
+}
+ * */
+
+// ---------------------------- End Public functions ---------------------------
+// -----------------------------------------------------------------------------
+
+// Called on start and when the month is changed, will remove current calendar and render new month
+// Triggers a "change" event of type "month" and date = first day of month
 function loadCalendar() {
 	var container = $.vCalendar;
 	
@@ -76,14 +105,15 @@ function loadCalendar() {
 	return $.trigger('change', { type: 'month', date: moment(oDate) });	// create a copy of oDate to prevent its value changed
 }
 
+// Called when a day is touched, triggers a "change" event of type "selected", the touched date
+// and the view in order to you can change it (add new data, change a color, etc.)
 function calendarClicked(e) {
 	var view = e.source;
 	view.date && $.trigger('change', { type: 'selected', date: moment(view.date), view: view });
 }
 
 /*
-// demo how to use selectedChange event
-
+// DEMO: how to use selectedChange event
 var selectedDates = [];
 function selectedChange(e) {
 	var date = e.date,
@@ -108,29 +138,3 @@ function calendarSwipe(e) {
 		action  = actions[e.direction];
 	action && action();	
 }
-
-//
-
-exports.getView = function() {
-	return vCalendar.children[0];
-};
-
-/*
-// demo how to use getView
-
-function loadEvents() {
-	var today = new Date(),
-		date  = today.getDate(),
-		month = today.getMonth(),
-		year  = today.getFullYear();
-	
-  	var children = $.vCalendar.getView().children;
-  	for(var i=0,ii=children.length; i<ii; i++){
-  		var current = new Date( parseInt(children[i].date, 10) );
-  		if (current.getFullYear() == year && current.getMonth() == month && current.getDate() == date) {
-  			children[i].add( $.UI.create('ImageView', { classes: 'imc-calendar-date-event' }) );
-  		}
-	};
-}
- * */
-
