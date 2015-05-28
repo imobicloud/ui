@@ -1,7 +1,6 @@
 /*
  args = {
- 	classes: null,
- 	height: null,
+ 	class: null, // or tss classname 
  	maxHeight: 80,
  	hintText: 'Enter message...'
  }
@@ -11,14 +10,10 @@ args.maxHeight = args.maxHeight || 80;
 
 init();
 function init() {
-	var style;
+	var exclude = ['id', 'maxHeight', 'hintText'],
+		style = _.omit(args, exclude);
 	
-	if (args.classes) {
-		style = $.createStyle({ classes: args.classes });
-		$.getView().applyProperties(style);
-	} else {
-		style = {};
-	}
+	$.getView().applyProperties(style);
 	
 	if (style.height) {
 		$.textarea.height = parseInt(style.height, 10);
@@ -36,7 +31,7 @@ function init() {
 };
 
 function textareaChange(e) {
-	var value = e.value;
+	var value = this.value;
 	
 	// toggle hint text
   	if (OS_IOS) {
@@ -74,15 +69,8 @@ exports.getValue = function() {
 };
 
 exports.setValue = function(value) {
-    if (OS_IOS) {
-        if (value.length > 0) {
-            $.hint.hide();
-        } else {
-            $.hint.show();
-        }
-    }
-        textareaChange($.textarea);
-	return $.textarea.value = value;
+	$.textarea.value = value;
+	return textareaChange.call( $.textarea );
 };
 
 exports.updateUI = function(style) {
