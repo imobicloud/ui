@@ -11,7 +11,7 @@ img { border: 0; vertical-align: middle; }
 .center { display:-webkit-box; -webkit-box-align:center; -webkit-box-pack:center; display:box; box-align:center; box-pack:center; }
 .ir { display: block; text-indent: -9999px; }
 
-#container {
+#app {
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;

@@ -2,6 +2,7 @@
  args = {
  	min: 0,
  	max: 100,
+ 	sensitive: 1,
  	tssclass: '',
  	targets: [0, 20, 40, 60, 80, 100], // or null
  	values: [20, 80]
@@ -20,9 +21,14 @@ function init() {
 	args.max = parseInt(args.max, 10);
 	args.min = parseInt(args.min, 10);
 	args.values = JSON.parse(args.values);
-	args.targets && (args.targets = JSON.parse(args.targets));
+	// args.targets && (args.targets = JSON.parse(args.targets));
+	args.sensitive = args.sensitive ? parseInt(args.sensitive, 10) : 1;
 	
 	vars.range  = args.max - args.min;
+	
+	var thumbWidth = $.createStyle({ classes: prefix + 'thumb' }).width;
+	if (thumbWidth == null) { alert( 'tss class [' + prefix + 'thumb] required [width] value!' ); }
+  	vars.thumbWidth = thumbWidth;
 	
 	//
 	
@@ -32,39 +38,25 @@ function init() {
 		track.addEventListener('postlayout', postlayout);
 		$.slider.add(track);
 		
-		var values = args.values;
-	  	for(var i=values.length - 1; i >= 0; i--){
-	  		var track = $.UI.create('View', { classes: prefix + 'track' + ' ' + prefix + 'track-' + i, left: 0, width: 0 });
-			vars['track_' + i] = track;
-			$.slider.add(track);
+	  	for(var i=args.values.length - 1; i >= 0; i--){
+	  		var view = $.UI.create('View', { left: 0, width: 0 });
+	  		vars['view_' + i] = view;
+	  		
+				view.add( $.UI.create('View', { classes: prefix + 'track' + ' ' + prefix + 'track-' + i }) );
+				view.add( $.UI.create('View', { thumbIndex: i, classes: prefix + 'thumb' + ' ' + prefix + 'thumb-' + i, right: 0 }) );
 			
-			var thumb = $.UI.create('View', { thumbIndex: i, classes: prefix + 'thumb' + ' ' + prefix + 'thumb-' + i, center: { x: 0, y: 0 } });
-			vars['thumb_' + i] = thumb;
-			$.slider.add(thumb);
+			$.slider.add(view);
 		};	
 }
 
 function postlayout(e) {
   	this.removeEventListener('postlayout', postlayout);
   	
-  	var y 			= this.rect.y,
-  		trackWidth  = this.rect.width,
-  		sliderWidth = this.parent.rect.width;
-  	
-  	// if (OS_ANDROID) {
-  		// y = measurement.pxToDP(y);
-  		// trackWidth = measurement.pxToDP(trackWidth);
-  		// sliderWidth = measurement.pxToDP(sliderWidth);
-  	// }
-  		
-  	var partWidth   = trackWidth / vars.range,
-  		minX		= (sliderWidth - trackWidth) / 2;
-  		
-  	vars.partWidth  = partWidth;
+  	var trackWidth  = this.rect.width;
   	vars.trackWidth = trackWidth;
-  	vars.minX 		= minX;
-  	vars.maxX 		= minX + trackWidth;
-  	vars.y 			= y;
+  	
+  	var partWidth   = trackWidth / vars.range;
+  	vars.partWidth  = partWidth;
   	
   	// if (args.targets) {
 		// var targets = args.targets;
@@ -75,21 +67,19 @@ function postlayout(e) {
 	
 	var pos = [],
 		min = args.min, 
-		values = args.values;
+		values = args.values,
+		thumbWidth = vars.thumbWidth,
+		halfWidth = thumbWidth / 2;
 		
   	for(var i=values.length - 1; i >= 0; i--){
-  		var value = values[i],
-  			width = (value - min) * partWidth;
+  		var width = (values[i] - min) * partWidth;
+  		width += thumbWidth;
   		
-  		var track = vars['track_' + i];
-  		track.left = minX;
-  		track.width = width;
+  		var view = vars['view_' + i];
+  		view.width = width;
+  		view.children[0].applyProperties({ left: halfWidth, right: halfWidth });
   		
-		var center = { x: minX + width, y: y };
-		var thumb = vars['thumb_' + i];
-		thumb.center = center;
-		
-		pos.unshift( center );	
+		pos.unshift(width);	
 	};
 	
 	//
@@ -115,19 +105,15 @@ function touchcancel(e) {
 function touchmove(e) {
 	e.cancelBubble = true;
 	if (vars.thumbIndex == null) { return; }
+	if (vars.x != null && Math.abs(vars.x - e.x) >= args.sensitive) { return; }
+	vars.x = e.x;
 	
-  	var pos = e.source.convertPointToView({ x: e.x, y: e.y }, $.slider);
-  	
-  	if (OS_ANDROID) {
-  		pos.x = measurement.pxToDP(pos.x);
-  		pos.y = measurement.pxToDP(pos.y);
-  	}	
-  	
-  	if (pos.x < vars.minX) { return; }
-  	else if (pos.x > vars.maxX) { return; }
+  	var pos = e.source.convertPointToView({ x: e.x, y: e.y }, $.slider.children[0]);
+  	if (OS_ANDROID) { pos.x = measurement.pxToDP(pos.x); }	
+  	if (pos.x < 0 || pos.x > vars.trackWidth) { return; }
   	
   	var index = vars.thumbIndex,
-  		width = pos.x - vars.minX,
+  		width = pos.x,
   		value = (width / vars.partWidth) + args.min;
   		
   	if (value - parseInt(value) >= 0.5) { 
@@ -141,25 +127,22 @@ function touchmove(e) {
   	var next = args.values[index + 1];
   	if (next && value >= next) { return; }
   	
-  	vars['track_' + index].width  = width;
-  	vars['thumb_' + index].center = { x: pos.x, y: vars.y };
+  	args.values[index] = value;
   	
-  	args.values[index] = value; 
-  	
-  	$.trigger('change', { index: index, value: value, pos: { x: pos.x, y: pos.y } });
+  	width += vars.thumbWidth;
+  	vars['view_' + index].width = width;
+  	$.trigger('change', { index: index, value: value, pos: width });
 }
 
 exports.getValue = function(roundUp) {
 	return args.values;
 };
 
-exports.setValue = function(values) {
+function setValue(values) {
 	args.values = values;
-	
-	var y = vars.y,
-		max = args.max,
+
+	var max = args.max,
 		min = args.min,
-		minX = vars.minX,
 		partWidth = vars.partWidth;
 	
 	for(var i=0,j=values.length; i<j; i++){
@@ -167,12 +150,25 @@ exports.setValue = function(values) {
 	  	if (value < min) { value = min; }
 	  	else if (value > max) { value = max; }
 	  	
-  		var width = (value - min) * partWidth,
-  			center = { x: minX + width, y: y };
-  			
-		vars['track_' + i].width  = width;
-		vars['thumb_' + i].center = center;
-
-		$.trigger('change', { index: i, value: value, pos: center });
+  		var width = (value - min) * partWidth;
+  		width += vars.thumbWidth;
+		vars['view_' + i].width = width;
+		$.trigger('change', { index: i, value: value, pos: width });
 	};
+};
+exports.setValue = setValue;
+
+exports.update = function(params) {
+    if (!params) {
+    	return;
+    }
+    
+    args = params;
+    
+    if (args.min && args.max) {
+        vars.range = args.max - args.min;
+        vars.partWidth  = vars.trackWidth / vars.range;
+    }
+    
+    setValue(args.values);
 };
