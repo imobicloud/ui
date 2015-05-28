@@ -81,7 +81,7 @@ exports.setValue = function(value) {
             $.hint.show();
         }
     }
-    
+        textareaChange($.textarea);
 	return $.textarea.value = value;
 };
 
