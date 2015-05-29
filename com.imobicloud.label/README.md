@@ -3,6 +3,10 @@
 
 Formatted Label
 
+NOTES: 
+- FOR NEW UPDATES, VISIT THIS REPOSITORY: https://github.com/imobicloud/com.imobicloud.label
+- WE WILL NOT UPDATE THIS WIDGET ANYMORE
+
 xml
 
 	<Widget id="label" src="com.imobicloud.label" class="tip-label" 
