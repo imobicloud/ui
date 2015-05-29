@@ -4,6 +4,10 @@ This calendar widget provides you with a very CSS customizable calendar with som
 
 ![Calendar example](http://i.imgur.com/jGWRtbK.png?1)
 
+NOTES: 
+- FOR NEW UPDATES, VISIT THIS REPOSITORY: https://github.com/imobicloud/com.imobicloud.calendar
+- WE WILL NOT UPDATE THIS WIDGET ANYMORE
+
 ##Manifest
 * Version: 1.0
 * Github: https://github.com/imobicloud/ui
