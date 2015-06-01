@@ -2,6 +2,8 @@
 
 Resizable Textarea can be used for message box in chat apps
 
+NOTE: FOR NEW UPDATES, VISIT THIS REPOSITORY: https://github.com/imobicloud/com.imobicloud.textarea
+
 ====
 
 View
