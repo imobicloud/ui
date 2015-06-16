@@ -1,6 +1,8 @@
-# Titanium UI - SliderUploader
+# Titanium UI - Slider
 
 ![Imgur](http://i.imgur.com/mJ82noZ.png)
+
+NOTE: FOR NEW UPDATES, VISIT THIS REPOSITORY: https://github.com/imobicloud/com.imobicloud.slider
 
 ====
 
