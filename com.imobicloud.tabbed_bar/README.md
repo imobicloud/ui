@@ -1,6 +1,8 @@
 # Tabbed Bar
 ====
 
+NOTE: FOR NEW UPDATES, VISIT THIS REPOSITORY: https://github.com/imobicloud/com.imobicloud.tabbedbar
+
 Tabbed bar for iOS and Android
 
 xml
