@@ -30,7 +30,7 @@ NOTE: FOR NEW UPDATES, VISIT THIS REPOSITORY: https://github.com/imobicloud/com.
 ## Create a Calendar in the View
 You can add a Calendar to a view by *requiring* the calendar widget. 
 
-	<Widget id="vCalendar" src="com.imobicloud.calendar" swipeable="true" />
+    <Widget id="vCalendar" src="com.imobicloud.calendar" swipeable="true" />
 
 Assign it an ID that you can use in your controller. E.g. `id="vCalendar"` You can now access the Calendar via `$.vCalendar` in your controller.
 The `swipeable="true"` option allows you to activate the swipe left/right on the calendar to change the current month.
@@ -42,7 +42,7 @@ Ti.API.info("calendar value " + $.vCalendar.value);
 ## Detect a Calendar change
 You can detect a Calendar change simply adding an onChange event. 
 
-	<Widget id="vCalendar" src="com.imobicloud.calendar" onChange="calendarChange" />
+    <Widget id="vCalendar" src="com.imobicloud.calendar" onChange="calendarChange" />
 
 You can now access the Calendar change in your controller:
 
@@ -101,11 +101,12 @@ The Calendar is off by default. Before you open your window, you need to call th
 
 ```
 $.vCalendar.init();
-or if you want to initialize in a specific day
+// or if you want to initialize in a specific day
 $.vCalendar.init({
-		date: new Date("October 13, 2014 11:13:00")
+    date: new Date("October 13, 2014 11:13:00")
 });
 ```
+
 ## Initialization Parameters
 
 | Parameter | Type | Description |
@@ -113,6 +114,8 @@ $.vCalendar.init({
 | date | *Date* | A date to start calendar on it. |
 | dateFormatter | *function* | A custom function to create every date item on the calendar. If not passed the default function creates a simple view with a label inside to represent the day. |
 | weekFormatter | *function* | A custom function to create every weekday item on the calendar. If not passed the default function creates a simple view with a label inside to represent the weekday. |
+| horizontalSeparator | *Boolean* | Set true to show horizontal rules between weeks. |
+| verticalSeparator | *Boolean* | Set true to show vertical rules between weeks. Take care about width on dates to fit all |
 
 ## Accessible Methods
 | Method | Description | Example |
@@ -123,6 +126,37 @@ $.vCalendar.init({
 | next() | Jumps one month forward. | `$.vCalendar.next();` |
 | getView() | The calendar has 2 children structures: [week, dates]. This function retrieves both in an array | `$.vCalendar.getView();` |
 | unload() | Removes the calendar from the view and all internal references  | `$.vCalendar.unload();` |
+
+## Setting separators rules
+
+By default, the calendar only shows dates, but you can display horizontal and vertical rules for a better days identification.
+
+![Calendar rules example](http://i62.tinypic.com/zodwdd.jpg)
+
+For horizontal rules, you only need to add the style in the app.tss file and initialize properly:
+```
+".imc-calendar-separator-line-horizontal": { width: "100%", height: 1, bottom: 0, backgroundColor: '#EEE' }
+```
+
+```
+$.vCalendar.init({
+    horizontalSeparator: true
+});
+```
+
+For vertical rules, you  need to add the style in the app.tss file, initialize properly and, maybe, adjust the size of week and date items to accommodate the new 7 rules:
+
+```
+".imc-calendar-week": { width: "13.5%", height: 32, left: 0.5 }
+".imc-calendar-separator-line-vertical": { width: 1, height: 32, right: 0, backgroundColor: '#EEE' }
+".imc-calendar-date": { width: "13.5%", height: 32, top: 0.5, left: 0.5 }
+```
+
+```
+$.vCalendar.init({
+    verticalSeparator: true
+});
+```
 
 ## Customizing
 
@@ -190,16 +224,16 @@ function loadEvents() {
     var moment = require('moment');
     var yesterday = moment().subtract(1, 'd').format('DD-MM-YYYY');
     
-	// The calendar has 2 children structures: [week, dates]. We only need dates
-  	var children = $.vCalendar.getView().children[1].children;
+    // The calendar has 2 children structures: [week, dates]. We only need dates
+    var children = $.vCalendar.getView().children[1].children;
     //Ti.API.info(JSON.stringify(children[0].children));
-  	for (var i=0; i<children.length; i++) {
+    for (var i=0; i<children.length; i++) {
         Ti.API.info("date: " + moment(children[i].date).format('DD-MM-YYYY'));
         if (yesterday == moment(children[i].date).format('DD-MM-YYYY')) {
             children[i].backgroundColor = 'yellow';
             // or you can add a new view, e.g.
-  			//children[i].add( $.UI.create('View', { classes: 'imc-calendar-date-event' }) );
-  		}
-	};
+            //children[i].add( $.UI.create('View', { classes: 'imc-calendar-date-event' }) );
+        }
+    };
 }
 ```

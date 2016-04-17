@@ -1,15 +1,17 @@
 /*
-".imc-calendar": { width: 320, height: Ti.UI.SIZE }
-	".imc-calendar-month": { height: Ti.UI.SIZE, top: 0, layout: 'vertical' }
-		".imc-calendar-weeks": { height: 32, top: 0.5, layout: 'horizontal' }
-			".imc-calendar-week": { width: 45, height: 32, left: 0.5 }
-				".imc-calendar-week-label": { color: '#fff', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' } }
-		".imc-calendar-dates": { height: Ti.UI.SIZE, bottom: 0.5, layout: 'horizontal' }
-			".imc-calendar-date": { width: 45, height: 33, top: 0.5, left: 0.5 }
-				".imc-calendar-date-label": { color: '#fff', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' }, touchEnabled: false }
-			".imc-calendar-today": {  }
-				".imc-calendar-today-label": { color: '#2b414d' }
-			// hide dates of next or previous month
+".imc-calendar": {top: 0, width: Ti.UI.FILL, height: Ti.UI.SIZE, backgroundColor: "white", borderColor: "black", borderWidth: 1 }
+    ".imc-calendar-month": { height: Ti.UI.SIZE, top: 0, layout: 'vertical'}
+        ".imc-calendar-weeks": { height: 32, top: 0.5, layout: 'horizontal', backgroundColor: "black" }
+            ".imc-calendar-week": { width: "14%", height: 32, left: 0.5 }
+                ".imc-calendar-week-label": { color: 'white', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' } }
+        ".imc-calendar-separator-line-horizontal": { width: "100%", height: 1, bottom: 0, backgroundColor: '#EEE' }
+        ".imc-calendar-separator-line-vertical": { width: 1, height: 32, right: 0, backgroundColor: '#EEE' }
+        ".imc-calendar-dates": { height: Ti.UI.SIZE, bottom: 0.5, layout: 'horizontal' }
+            ".imc-calendar-date": { width: "14%", height: 32, top: 0.5, left: 0.5 }
+                ".imc-calendar-date-label": { color: 'black', font: { fontSize: 13, fontFamily: 'HelveticaNeue-Light' }, touchEnabled: false }
+            ".imc-calendar-today": { backgroundColor:"#FCF8E3" }
+                ".imc-calendar-today-label": { color: 'black' }
+			// hide/disable dates of next or previous month
 			".imc-calendar-disabled": { height: 0, visible: false, touchEnabled: false }
 				".imc-calendar-disabled-label": { visible: false, touchEnabled: false }
 		
